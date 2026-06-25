@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Inter:wght@300;400;500;600&display=swap');
+
+/* =====================================================================
+   The Lense Perspective — Shared stylesheet (modern editorial theme)
+   Warm off-white · ink · rose/claret accent · deep-plum dark sections.
+   Class names kept stable (.gold-* etc.) but recoloured to the accent.
+   ===================================================================== */
+
+:root {
+  --accent: #c2415c;        /* rose / claret */
+  --accent-deep: #a63149;
+  --plum: #7a3350;
+  --plum-dark: #2a1620;
+  --bg: #faf7f2;
+  --ink: #1a1614;
+  /* legacy aliases still referenced by some rules */
+  --gold: #c2415c;
+  --gold-deep: #a63149;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: "Inter", sans-serif;
+}
+
+::selection { background: rgba(194, 65, 92, 0.18); }
+
+/* Reduced motion ------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Focus + skip link ---------------------------------------------------- */
+a:focus-visible, button:focus-visible, input:focus-visible,
+textarea:focus-visible, select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.skip-link {
+  position: absolute; left: -999px; top: 0; z-index: 100;
+  background: var(--accent); color: #fff;
+  padding: 10px 18px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; font-size: 12px;
+}
+.skip-link:focus { left: 8px; top: 8px; }
+
+/* Accent hairlines / borders ------------------------------------------- */
+.gold-hairline {
+  border: 1px solid transparent;
+  border-image: linear-gradient(to right, #c2415c, #7a3350, #c2415c) 1;
+}
+.gold-hairline-t {
+  border-top: 1px solid transparent;
+  border-image: linear-gradient(to right, transparent, #c2415c, transparent) 1;
+}
+.gold-border { border: 1px solid var(--accent); }
+
+/* Animated underlines -------------------------------------------------- */
+.gold-underline-animate { position: relative; }
+.gold-underline-animate::after {
+  content: ''; position: absolute; bottom: -2px; left: 50%;
+  width: 0; height: 1px; background: var(--accent);
+  transition: width 0.3s ease; transform: translateX(-50%);
+}
+.gold-underline-animate:hover::after,
+.gold-underline-animate:focus-visible::after { width: 100%; }
+
+.gold-underline-hover { position: relative; }
+.gold-underline-hover::after {
+  content: ''; position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 1px; background-color: var(--accent);
+  transition: width 0.3s ease;
+}
+.gold-underline-hover:hover::after,
+.gold-underline-hover:focus-visible::after { width: 100%; }
+
+/* Pill button helper (modern) ------------------------------------------ */
+.btn-pill { border-radius: 9999px; }
+
+/* Custom cursor (desktop pointer only) --------------------------------- */
+.lens-cursor {
+  width: 76px; height: 76px;
+  background: rgba(194, 65, 92, 0.10);
+  border: 1px solid rgba(194, 65, 92, 0.55);
+  border-radius: 50%; position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.3s ease-out, width 0.3s ease, height 0.3s ease, background 0.3s ease;
+}
+.lens-cursor span {
+  font-family: "Inter", sans-serif; font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.2em; color: var(--accent);
+}
+body.lens-active .lens-cursor { transform: translate(-50%, -50%) scale(1); }
+@media (max-width: 1024px), (hover: none) {
+  .lens-cursor { display: none !important; }
+}
+
+/* Scroll reveal -------------------------------------------------------- */
+.reveal-up {
+  opacity: 0; transform: translateY(34px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-up.active { opacity: 1; transform: translateY(0); }
+
+/* Image zoom ----------------------------------------------------------- */
+.bento-hover img, .bento-hover .bento-bg {
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.bento-hover:hover img, .bento-hover:hover .bento-bg { transform: scale(1.06); }
+
+/* Marquee -------------------------------------------------------------- */
+@keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.animate-scroll { display: flex; width: fit-content; animation: scroll 55s linear infinite; }
+.animate-scroll:hover { animation-play-state: paused; }
+
+/* Mobile menu ---------------------------------------------------------- */
+#mobileMenu { transition: opacity 0.4s ease, visibility 0.4s ease; }
+#mobileMenu.hidden-menu { opacity: 0; visibility: hidden; pointer-events: none; }
+#mobileMenu .menu-link {
+  opacity: 0; transform: translateY(12px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+#mobileMenu:not(.hidden-menu) .menu-link { opacity: 1; transform: translateY(0); }
+
+/* Hero fade-in --------------------------------------------------------- */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: translateY(0); } }
+.fade-up { animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.fade-up.delay-1 { animation-delay: 0.12s; }
+.fade-up.delay-2 { animation-delay: 0.24s; }
+.fade-up.delay-3 { animation-delay: 0.36s; }
+
+/* Scrim for text-over-image (light theme) ------------------------------ */
+.scrim-bottom { background: linear-gradient(to top, rgba(26,22,20,0.78) 0%, rgba(26,22,20,0.30) 45%, rgba(26,22,20,0) 80%); }
+
+/* Forms ---------------------------------------------------------------- */
+.field-error { color: #b3261e; font-size: 12px; letter-spacing: 0.04em; margin-top: 6px; min-height: 16px; }
+input.invalid, textarea.invalid, select.invalid { border-color: #b3261e !important; }
+
+/* Active nav link ------------------------------------------------------ */
+.nav-link.is-active { color: var(--accent); }
+
+/* Display serif niceties ---------------------------------------------- */
+.font-headline-lg, .font-display-lg, .font-display-lg-mobile, .font-headline-md { font-optical-sizing: auto; }

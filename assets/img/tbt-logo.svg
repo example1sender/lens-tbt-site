@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="TBT Events by Abeer K logo">
+  <circle cx="60" cy="60" r="60" fill="#4a1420"></circle>
+  <circle cx="60" cy="60" r="52.5" fill="none" stroke="#e9cda0" stroke-opacity="0.55" stroke-width="1"></circle>
+  <text x="60" y="62" text-anchor="middle" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-weight="600" font-size="42" letter-spacing="1.5" fill="#f3e6da">TBT</text>
+  <text x="60" y="84" text-anchor="middle" font-family="Georgia, serif" font-size="8.5" letter-spacing="5.5" fill="#e9cda0">EVENTS</text>
+</svg>

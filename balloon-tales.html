@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" type="image/png" href="assets/img/favicon.png">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta name="description" content="TBT Events by Abeer K (formerly The Balloon Tales) — custom productions, floral, balloon & lighting installations, hand-tied bouquets and luxury gifting in Mumbai.">
+<title>TBT Events by Abeer K | Events, Décor &amp; Gifting</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="assets/js/tailwind.config.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+<style>
+  /* ---- TBT Events — page-scoped flourishes (within the shared brand) ---- */
+  .bt-balloon {
+    position: absolute; border-radius: 50%;
+    background: radial-gradient(circle at 34% 30%, rgba(255,255,255,.45), rgba(194,65,92,.85) 42%, rgba(122,51,80,.95));
+    filter: blur(.3px); opacity: .9;
+    box-shadow: 0 22px 60px -18px rgba(122,51,80,.55);
+    animation: btFloat 9s ease-in-out infinite;
+  }
+  .bt-balloon::after { /* string */
+    content: ""; position: absolute; left: 50%; top: 99%;
+    width: 1px; height: 70px; background: linear-gradient(to bottom, rgba(255,255,255,.5), transparent);
+    transform: translateX(-50%);
+  }
+  .bt-balloon.tone-plum { background: radial-gradient(circle at 34% 30%, rgba(255,255,255,.4), rgba(122,51,80,.9) 45%, rgba(42,22,32,.95)); }
+  .bt-balloon.tone-blush { background: radial-gradient(circle at 34% 30%, rgba(255,255,255,.6), rgba(243,221,230,.95) 45%, rgba(194,65,92,.55)); }
+  @keyframes btFloat { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-26px) rotate(3deg); } }
+
+  /* confetti-dot field for dark bands */
+  .bt-dotfield {
+    background-image:
+      radial-gradient(circle, rgba(243,221,230,.5) 1.4px, transparent 1.6px),
+      radial-gradient(circle, rgba(194,65,92,.4) 1.4px, transparent 1.6px);
+    background-size: 46px 46px, 46px 46px;
+    background-position: 0 0, 23px 23px;
+  }
+
+  .bt-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .26em; text-transform: uppercase; }
+  .bt-index { font-family: "Fraunces", serif; font-variant-numeric: tabular-nums; }
+
+  /* service card overlay polish */
+  .bt-svc .bt-svc-meta { transform: translateY(8px); opacity: .92; transition: transform .5s cubic-bezier(.16,1,.3,1), opacity .5s ease; }
+  .bt-svc:hover .bt-svc-meta { transform: translateY(0); opacity: 1; }
+
+  .bt-tag { transition: border-color .3s ease, color .3s ease, background .3s ease, transform .3s ease; }
+  .bt-tag:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-3px); }
+</style>
+</head>
+<body class="font-body-md text-body-md" data-page="balloon-tales">
+<header id="site-nav"></header>
+
+<main id="main">
+
+  <!-- ======================= HERO ======================= -->
+  <section class="relative min-h-[92vh] md:min-h-screen flex items-end overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <div data-bg="bt.hero" class="w-full h-full bg-cover bg-center" style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuDLwSmDiWx_38Qu-kZLF4Pw8ryHSyig5mJdhDWuVr2ALPW8quXFyw2WerfT-yfueaN7qPdCtaJq7QQX2LHg9FxMVufoC5uXprPByjJrI53PWPD4rs6uRctbokASy1xzSzsQZI1qqNRFOqtAmLcmQTMNrK33joBO2xmPWbUxe_UYUXuA7E7QzoyCi93rYmEZg1tw9Ly2yuksW7lR6HPsNv_CLd3RD588MZSVjtbRdZDcKeZsioFFoTsMhoi6a1yI8KyIR6E6qskJvgE')"></div>
+      <div class="absolute inset-0" style="background-image:linear-gradient(to top, rgba(26,12,18,0.94) 0%, rgba(42,22,32,0.55) 38%, rgba(122,51,80,0.20) 70%, rgba(26,12,18,0.30) 100%);"></div>
+    </div>
+
+    <!-- floating balloon motif -->
+    <div class="absolute inset-0 z-[1] pointer-events-none hidden sm:block" aria-hidden="true">
+      <span class="bt-balloon" style="width:84px;height:104px;right:9%;top:16%;animation-delay:.2s"></span>
+      <span class="bt-balloon tone-blush" style="width:54px;height:66px;right:20%;top:30%;animation-delay:1.4s"></span>
+      <span class="bt-balloon tone-plum" style="width:120px;height:148px;right:3%;top:40%;animation-delay:.8s"></span>
+    </div>
+
+    <!-- editorial flourishes -->
+    <div class="absolute left-4 top-1/2 -translate-y-1/2 z-[2] hidden xl:block" aria-hidden="true">
+      <span class="font-headline-md text-white/30 text-[11px] tracking-[0.5em] uppercase" style="writing-mode:vertical-rl;transform:rotate(180deg)">Mumbai &middot; India</span>
+    </div>
+    <div class="absolute right-6 md:right-12 bottom-10 z-[2] hidden lg:block text-right fade-up delay-3">
+      <p class="font-headline-md italic text-white/65 text-xl leading-none">Abeer Khan</p>
+      <p class="bt-eyebrow text-white/40 mt-2 text-[10px]">Founder &amp; Designer</p>
+    </div>
+
+    <div class="relative z-10 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full pb-16 md:pb-24">
+      <div class="flex items-center gap-4 mb-7 fade-up">
+        <span class="h-px w-14 bg-secondary"></span>
+        <span class="bt-eyebrow text-white/85" data-text="tbt.hero_eyebrow">Events &middot; Décor &middot; Floral &middot; Gifting</span>
+      </div>
+      <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-white leading-[1.0] max-w-4xl fade-up delay-1" data-text="tbt.hero_title">Where celebrations <em class="italic font-light text-secondary-container">come alive</em>.</h1>
+      <p class="text-body-lg text-white/80 max-w-xl mt-7 mb-10 fade-up delay-2" data-text="tbt.hero_text">Custom productions, floral &amp; balloon installations, lighting and bespoke gifting — atmosphere designed by Abeer Khan.</p>
+      <div class="flex flex-wrap items-center gap-4 fade-up delay-3">
+        <a href="#book" data-magnetic class="inline-flex items-center gap-2 btn-pill px-9 py-4 bg-secondary text-on-secondary text-[12px] font-semibold tracking-wide uppercase hover:bg-secondary-fixed transition-all duration-300">Plan Your Event<span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
+        <a href="#work" class="inline-flex items-center gap-2 text-white/85 hover:text-white text-[12px] font-semibold tracking-[0.18em] uppercase transition-colors">View our work<span class="material-symbols-outlined text-[18px]">south</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= INTRO ======================= -->
+  <section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-24 md:py-section-gap">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-gutter items-center">
+      <div class="md:col-span-6 reveal-up">
+        <span class="bt-eyebrow text-secondary block mb-6">Formerly &ldquo;The Balloon Tales&rdquo;</span>
+        <h2 class="font-headline-lg text-3xl md:text-headline-lg text-on-background mb-7 leading-tight" data-text="tbt.intro_title">Atmosphere, designed in detail.</h2>
+        <p class="text-body-lg text-on-surface-variant mb-6">We transform spaces into immersive worlds — sculptural florals, considered lighting and playful balloon artistry, all composed with a designer&rsquo;s eye. From intimate surprises to full-scale productions, every element is intentional.</p>
+        <p class="text-on-surface-variant mb-9">Based in Mumbai, available across India and beyond.</p>
+        <div class="flex flex-wrap gap-2.5">
+          <span class="bt-tag inline-flex items-center gap-2 rounded-full border border-outline-variant px-4 py-2 text-[12.5px] font-semibold text-on-surface-variant"><span class="material-symbols-outlined text-[17px] text-secondary">local_florist</span>Florals</span>
+          <span class="bt-tag inline-flex items-center gap-2 rounded-full border border-outline-variant px-4 py-2 text-[12.5px] font-semibold text-on-surface-variant"><span class="material-symbols-outlined text-[17px] text-secondary">celebration</span>Balloons</span>
+          <span class="bt-tag inline-flex items-center gap-2 rounded-full border border-outline-variant px-4 py-2 text-[12.5px] font-semibold text-on-surface-variant"><span class="material-symbols-outlined text-[17px] text-secondary">light_mode</span>Lighting</span>
+          <span class="bt-tag inline-flex items-center gap-2 rounded-full border border-outline-variant px-4 py-2 text-[12.5px] font-semibold text-on-surface-variant"><span class="material-symbols-outlined text-[17px] text-secondary">redeem</span>Gifting</span>
+        </div>
+      </div>
+      <div class="md:col-span-5 md:col-start-8 reveal-up">
+        <div class="relative">
+          <div class="aspect-[4/5] overflow-hidden rounded-2xl bento-hover"><img data-img="bt.intro" class="w-full h-full object-cover" alt="Sculptural floral and balloon styling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyPd42fW8f3tY8sq3x4lzLg_3L1jbnUUix66LnAN4hw3LRlcimsvCjqqDTE_rNvxkL7VasPHnt3K-daE_L5wGVusJ0RFdubMfkBLbswfnyXpwqllai7TT6G8lgEhUrq6M9GqgzYoodplgHFUoRn5EVbbqFfEVFU0XktIZBwW8t33DB6DPVVksRHTgeTXvVuhiZP_Acr0PrdeY_EeHuNQjQHnAxbAuzbl7c5AZUs5Bg-Tg2vdp56ZF7V9TLSQ-ScVS0eDG3zcZLPzc"></div>
+          <div class="absolute -bottom-6 -left-5 md:-left-8 bg-surface rounded-2xl shadow-xl border border-outline-variant px-6 py-5 max-w-[230px]">
+            <p class="font-headline-md text-2xl text-secondary leading-none">100+</p>
+            <p class="text-on-surface-variant text-[13px] mt-1.5 leading-snug">celebrations styled across weddings, milestones &amp; brands</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= SERVICES ======================= -->
+  <section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto pb-24 md:pb-section-gap">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-12 reveal-up">
+      <div>
+        <span class="bt-eyebrow text-secondary block mb-3">What we create</span>
+        <h2 class="font-headline-lg text-3xl md:text-headline-lg text-on-background" data-text="tbt.services_title">Our services.</h2>
+      </div>
+      <p class="text-on-surface-variant max-w-sm md:text-right">Three signature disciplines, woven together into one seamless experience.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-gutter">
+      <a href="#book" data-tilt class="bt-svc group relative aspect-[4/5] overflow-hidden rounded-2xl bento-hover reveal-up block">
+        <img data-img="bt.service_1" class="w-full h-full object-cover" alt="Custom event production" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFqMh_vvhJGUadDYwyKlmesuwGFtGv6Qcfgq3TDw_G_2fs6EMyjHV79mQ0mHY2glbiB28FNzIhfCp8RYkDoxKAwfI4RAkNRYKx1S53tejwTgUS4bHqZxIAyj45Q1AziEeBkhLIDu3h7_cb0Yvp9pdzdTHIBkU8dishzCnd_P0sz7bZNDgzk8KDpVlTAZFNLIcN-c-8J6p1zBM7LS9HzE3Io69yi8xpI526X7SrvSkhjDqLg89gqsvryS7Brz0tzpAXJfTqkQvokTg">
+        <div class="absolute inset-0 scrim-bottom"></div>
+        <span class="bt-index absolute top-5 left-6 text-white/55 text-lg">01</span>
+        <div class="bt-svc-meta absolute bottom-7 left-7 right-7"><h3 class="font-headline-lg text-2xl text-white mb-1">Custom Productions</h3><p class="text-white/80 text-sm">End-to-end event design &amp; build.</p></div>
+      </a>
+      <a href="#book" data-tilt class="bt-svc group relative aspect-[4/5] overflow-hidden rounded-2xl bento-hover reveal-up block" style="transition-delay:100ms">
+        <img data-img="bt.service_2" class="w-full h-full object-cover" alt="Floral and balloon installation" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyPd42fW8f3tY8sq3x4lzLg_3L1jbnUUix66LnAN4hw3LRlcimsvCjqqDTE_rNvxkL7VasPHnt3K-daE_L5wGVusJ0RFdubMfkBLbswfnyXpwqllai7TT6G8lgEhUrq6M9GqgzYoodplgHFUoRn5EVbbqFfEVFU0XktIZBwW8t33DB6DPVVksRHTgeTXvVuhiZP_Acr0PrdeY_EeHuNQjQHnAxbAuzbl7c5AZUs5Bg-Tg2vdp56ZF7V9TLSQ-ScVS0eDG3zcZLPzc">
+        <div class="absolute inset-0 scrim-bottom"></div>
+        <span class="bt-index absolute top-5 left-6 text-white/55 text-lg">02</span>
+        <div class="bt-svc-meta absolute bottom-7 left-7 right-7"><h3 class="font-headline-lg text-2xl text-white mb-1">Floral &amp; Balloon Installations</h3><p class="text-white/80 text-sm">Sculptural, statement-making décor.</p></div>
+      </a>
+      <a href="#book" data-tilt class="bt-svc group relative aspect-[4/5] overflow-hidden rounded-2xl bento-hover reveal-up block" style="transition-delay:200ms">
+        <img data-img="bt.service_3" class="w-full h-full object-cover" alt="Curated luxury gifting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDImHFV5Hmh35U5FkZy03ZHjFQQl68OpSjwHQtPYAIbwYuWcvfphoNT0NZzRHNLrz-v8VSBqbVJgskhXDxoaxeQv5Wf5yzTxqSQn4BZK6fl1aIsb42SMFfDGuBpaB98VFgiKysJhVNbijTYi3GRS58AQA-H-ployyWGWSvyzGDCFS1xSIeP0P-8h6rXUvo8iN7Ohgswk_HIjNoz38L0ZbC00Hgd8QaXZEHniFH3EqmsU0RVmPLTAOxXXZ8AVxGUNaE2fLviyxivhb8">
+        <div class="absolute inset-0 scrim-bottom"></div>
+        <span class="bt-index absolute top-5 left-6 text-white/55 text-lg">03</span>
+        <div class="bt-svc-meta absolute bottom-7 left-7 right-7"><h3 class="font-headline-lg text-2xl text-white mb-1">Curated Gifting</h3><p class="text-white/80 text-sm">Hand-tied bouquets &amp; bespoke hampers.</p></div>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 reveal-up">
+      <div class="bt-tag flex items-center justify-center gap-2.5 rounded-xl border border-outline-variant px-5 py-4"><span class="material-symbols-outlined text-secondary">light_mode</span><p class="text-sm font-medium text-on-background">Lighting Design</p></div>
+      <div class="bt-tag flex items-center justify-center gap-2.5 rounded-xl border border-outline-variant px-5 py-4"><span class="material-symbols-outlined text-secondary">air</span><p class="text-sm font-medium text-on-background">Hot-Air Balloons</p></div>
+      <div class="bt-tag flex items-center justify-center gap-2.5 rounded-xl border border-outline-variant px-5 py-4"><span class="material-symbols-outlined text-secondary">favorite</span><p class="text-sm font-medium text-on-background">Surprise Balloons</p></div>
+      <div class="bt-tag flex items-center justify-center gap-2.5 rounded-xl border border-outline-variant px-5 py-4"><span class="material-symbols-outlined text-secondary">storefront</span><p class="text-sm font-medium text-on-background">Corporate Events</p></div>
+    </div>
+  </section>
+
+  <!-- ======================= APPROACH (dark band) ======================= -->
+  <section class="relative overflow-hidden bg-primary text-on-primary py-24 md:py-section-gap">
+    <div class="bt-dotfield absolute inset-0 opacity-40" aria-hidden="true"></div>
+    <span class="bt-balloon hidden md:block" style="width:70px;height:88px;right:8%;top:18%;animation-delay:.5s" aria-hidden="true"></span>
+    <span class="bt-balloon tone-blush hidden md:block" style="width:44px;height:54px;right:15%;top:34%;animation-delay:1.6s" aria-hidden="true"></span>
+    <div class="relative z-10 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+      <div class="max-w-2xl reveal-up mb-14">
+        <span class="bt-eyebrow text-secondary-container block mb-4">The TBT approach</span>
+        <h2 class="font-headline-lg text-3xl md:text-headline-lg text-on-primary leading-tight">How a celebration comes together.</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-gutter">
+        <div class="reveal-up">
+          <div class="flex items-center gap-4 mb-4"><span class="bt-index text-secondary-container text-3xl">01</span><div class="flex-1 h-px bg-on-primary/15"></div></div>
+          <h3 class="font-headline-md text-xl text-on-primary mb-2">Discover</h3>
+          <p class="text-on-primary/65 leading-relaxed">We listen to your story, your space and your guests — and shape a mood that&rsquo;s unmistakably yours.</p>
+        </div>
+        <div class="reveal-up" style="transition-delay:100ms">
+          <div class="flex items-center gap-4 mb-4"><span class="bt-index text-secondary-container text-3xl">02</span><div class="flex-1 h-px bg-on-primary/15"></div></div>
+          <h3 class="font-headline-md text-xl text-on-primary mb-2">Design</h3>
+          <p class="text-on-primary/65 leading-relaxed">Florals, balloons, lighting and gifting are composed into one cohesive, considered world.</p>
+        </div>
+        <div class="reveal-up" style="transition-delay:200ms">
+          <div class="flex items-center gap-4 mb-4"><span class="bt-index text-secondary-container text-3xl">03</span><div class="flex-1 h-px bg-on-primary/15"></div></div>
+          <h3 class="font-headline-md text-xl text-on-primary mb-2">Produce</h3>
+          <p class="text-on-primary/65 leading-relaxed">Our team installs, styles and stands by on the day so you can simply be present in the moment.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= GALLERY (bento) ======================= -->
+  <section id="work" class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-24 md:py-section-gap">
+    <div class="mb-12 reveal-up"><span class="bt-eyebrow text-secondary block mb-3">Recent work</span><h2 class="font-headline-lg text-3xl md:text-headline-lg text-on-background">Selected celebrations.</h2></div>
+
+    <div class="grid grid-cols-2 md:grid-cols-12 gap-4 md:gap-gutter">
+      <div class="col-span-2 md:col-span-7 rounded-2xl overflow-hidden bento-hover reveal-up aspect-[16/11]" data-cursor="View"><img data-img="bt.gallery_1" loading="lazy" class="w-full h-full object-cover" alt="Styled event table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeBZsOd9myKL_8VGVVLHTDRCGDN3NDVqHQA2_KrIOavIFdWlRk1gVQtsyQ8yy6JrN2r9dBDjSDBqRVQKxYoJ6XxtSn8b6fbYgwAl3ftOhfVJJ7dkcShsRVfXxDMujyBPsHgpOiakRh9ET1Ck2tCS3IOhHHoK4hXq_uqhg5XqDwmkz8_avors5PAFRHfgQ74CeTwXbcNFwCEXpY2zaCMRRSGq7fUjtoMmODYXrdFnDHInCeAYxy77bAX7syct8o8jD4BL3saedVIHc"></div>
+      <div class="col-span-2 md:col-span-5 rounded-2xl overflow-hidden bento-hover reveal-up aspect-[16/11] md:aspect-auto" data-cursor="View" style="transition-delay:80ms"><img data-img="bt.gallery_2" loading="lazy" class="w-full h-full object-cover" alt="Dried and fresh floral arrangement" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxrICXoEhW_e28KHXh7nOQ8IZ6tt4cfqx3rRjk9jqA1kgvtHkX7jikJyjN8OXbxcUuuR0h7o21TCodh4-naT9pWEbwrusLM2vKdCU_vXDI4OJ69TBR1uuF6zHogRDm2p2IE8i4xN3jCN661Qq6PKaKQWssfHPZgtMj54h21YyJ9zhmgVRT7bAW4hEekIMsBPijnA3YdQ-YUCkm-CJUGRzmIrU_N8EZH6StOX6Mi14fPd78w8AQyj8PSFzZze1v448csz8mMfMwIXs"></div>
+
+      <div class="rounded-2xl overflow-hidden bento-hover reveal-up aspect-[4/5] md:col-span-4" data-cursor="View"><img data-img="bt.gallery_3" loading="lazy" class="w-full h-full object-cover" alt="Stylist placing a name card" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbW3yJPxo4ozYZO9mUuoyk-NahYxWphwk4GaY1OqR8i2sP9ktBCraZGAnxTz_ib-DTsn-JyN4w2y_Z4lKLOE5nhCChiwnA76qDZqz20gzhu6noB-opeBaOi7Grs1VLV9tGdoyZSRpo9miB-PkNMvGabPJ02VMtDYxoXxmEXOtuI0NNH8ze_X2zHvvn2cGbcyvR0V97UtAEyPVpAv-Emz-y4D7Vw0_Ge5ZIVLqNLKaiPS1aJkpNv6cUCN6LWlM6IuW0VVFXPl-bVVE"></div>
+      <div class="rounded-2xl overflow-hidden bento-hover reveal-up aspect-[4/5] md:col-span-4" data-cursor="View" style="transition-delay:80ms"><img data-img="bt.gallery_5" loading="lazy" class="w-full h-full object-cover" alt="Luxury gift hamper" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDImHFV5Hmh35U5FkZy03ZHjFQQl68OpSjwHQtPYAIbwYuWcvfphoNT0NZzRHNLrz-v8VSBqbVJgskhXDxoaxeQv5Wf5yzTxqSQn4BZK6fl1aIsb42SMFfDGuBpaB98VFgiKysJhVNbijTYi3GRS58AQA-H-ployyWGWSvyzGDCFS1xSIeP0P-8h6rXUvo8iN7Ohgswk_HIjNoz38L0ZbC00Hgd8QaXZEHniFH3EqmsU0RVmPLTAOxXXZ8AVxGUNaE2fLviyxivhb8"></div>
+      <div class="rounded-2xl overflow-hidden bento-hover reveal-up aspect-[4/5] md:col-span-4" data-cursor="View" style="transition-delay:160ms"><img data-img="bt.gallery_6" loading="lazy" class="w-full h-full object-cover" alt="Macro of luxury florals" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxrICXoEhW_e28KHXh7nOQ8IZ6tt4cfqx3rRjk9jqA1kgvtHkX7jikJyjN8OXbxcUuuR0h7o21TCodh4-naT9pWEbwrusLM2vKdCU_vXDI4OJ69TBR1uuF6zHogRDm2p2IE8i4xN3jCN661Qq6PKaKQWssfHPZgtMj54h21YyJ9zhmgVRT7bAW4hEekIMsBPijnA3YdQ-YUCkm-CJUGRzmIrU_N8EZH6StOX6Mi14fPd78w8AQyj8PSFzZze1v448csz8mMfMwIXs"></div>
+
+      <div class="col-span-2 md:col-span-12 rounded-2xl overflow-hidden bento-hover reveal-up aspect-[16/9] md:aspect-[21/8]" data-cursor="View"><img data-img="bt.gallery_4" loading="lazy" class="w-full h-full object-cover" alt="Opulent gala dining room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLwSmDiWx_38Qu-kZLF4Pw8ryHSyig5mJdhDWuVr2ALPW8quXFyw2WerfT-yfueaN7qPdCtaJq7QQX2LHg9FxMVufoC5uXprPByjJrI53PWPD4rs6uRctbokASy1xzSzsQZI1qqNRFOqtAmLcmQTMNrK33joBO2xmPWbUxe_UYUXuA7E7QzoyCi93rYmEZg1tw9Ly2yuksW7lR6HPsNv_CLd3RD588MZSVjtbRdZDcKeZsioFFoTsMhoi6a1yI8KyIR6E6qskJvgE"></div>
+    </div>
+  </section>
+
+  <!-- ======================= BOOKING ======================= -->
+  <section id="book" class="relative overflow-hidden bg-surface-container py-24 md:py-section-gap">
+    <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-gutter">
+      <div class="lg:col-span-5">
+        <span class="bt-eyebrow text-secondary block mb-4">Plan with us</span>
+        <h2 class="font-headline-lg text-3xl md:text-headline-lg text-on-background mb-6" data-text="tbt.book_title">Let&rsquo;s design your event.</h2>
+        <p class="text-on-surface-variant mb-10 max-w-md text-body-lg">Tell us about your celebration and we&rsquo;ll craft a proposal around your vision, space and budget.</p>
+        <div class="space-y-3.5">
+          <p class="flex items-center gap-3.5 text-on-surface-variant"><span class="material-symbols-outlined text-secondary">person</span><span data-text="tbt.founder" class="text-on-background font-medium">Abeer Khan</span></p>
+          <p class="flex items-center gap-3.5"><span class="material-symbols-outlined text-secondary">mail</span><a data-text="tbt.email" data-href-mail="tbt.email" href="mailto:designers03studio@gmail.com" class="text-on-surface-variant hover:text-secondary transition-colors break-all">designers03studio@gmail.com</a></p>
+          <p class="flex items-center gap-3.5"><span class="material-symbols-outlined text-secondary">call</span><a data-text="tbt.phone" data-href-tel="tbt.phone" href="tel:+917506991054" class="text-on-surface-variant hover:text-secondary transition-colors">+91 75069 91054</a></p>
+          <p class="flex items-center gap-3.5"><span class="material-symbols-outlined text-secondary">chat</span><a data-href-url="tbt.whatsapp_url" href="https://wa.me/message/R2FYRZQBUD6IK1" class="text-on-surface-variant hover:text-secondary transition-colors">WhatsApp us</a></p>
+          <p class="flex items-center gap-3.5"><span class="material-symbols-outlined text-secondary">photo_camera</span><a data-text="tbt.instagram" data-href-url="tbt.instagram_url" href="https://instagram.com/tbt.events" class="text-on-surface-variant hover:text-secondary transition-colors">@tbt.events</a></p>
+          <p class="flex items-center gap-3.5 text-on-surface-variant"><span class="material-symbols-outlined text-secondary">location_on</span><span data-text="tbt.location">Mumbai, India</span></p>
+        </div>
+      </div>
+      <div class="lg:col-span-6 lg:col-start-7">
+        <form id="btBookingForm" data-booking name="balloon-tales-booking" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="thank-you.html" novalidate class="bg-surface text-on-surface rounded-2xl p-7 md:p-9 space-y-5 shadow-sm border border-outline-variant">
+          <input type="hidden" name="form-name" value="balloon-tales-booking">
+          <input type="hidden" name="studio" value="TBT Events by Abeer K">
+          <p class="hidden"><label>Leave this field empty: <input name="bot-field"></label></p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label for="bt-name" class="block text-[12px] font-semibold tracking-[0.18em] uppercase text-on-surface-variant mb-2">Name *</label>
+              <input id="bt-name" name="name" type="text" class="w-full bg-surface rounded-lg border border-outline-variant px-4 py-3 focus:border-secondary outline-none transition-colors" placeholder="Your name">
+              <p class="field-error" aria-live="polite"></p>
+            </div>
+            <div>
+              <label for="bt-email" class="block text-[12px] font-semibold tracking-[0.18em] uppercase text-on-surface-variant mb-2">Email *</label>
+              <input id="bt-email" name="email" type="email" class="w-full bg-surface rounded-lg border border-outline-variant px-4 py-3 focus:border-secondary outline-none transition-colors" placeholder="you@example.com">
+              <p class="field-error" aria-live="polite"></p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label for="bt-phone" class="block text-[12px] font-semibold tracking-[0.18em] uppercase text-on-surface-variant mb-2">Phone / WhatsApp</label>
+              <input id="bt-phone" name="phone" type="tel" class="w-full bg-surface rounded-lg border border-outline-variant px-4 py-3 focus:border-secondary outline-none transition-colors" placeholder="Optional">
+              <p class="field-error" aria-live="polite"></p>
+            </div>
+            <div>
+              <label for="bt-date" class="block text-[12px] font-semibold tracking-[0.18em] uppercase text-on-surface-variant mb-2">Event Date</label>
+              <input id="bt-date" name="date" type="date" class="w-full bg-surface rounded-lg border border-outline-variant px-4 py-3 focus:border-secondary outline-none transition-colors [color-scheme:light]">
+              <p class="field-error" aria-live="polite"></p>
+            </div>
+          </div>
+          <div>
+            <label for="bt-service" class="block text-[12px] font-semibold tracking-[0.18em] uppercase text-on-surface-variant mb-2">Service *</label>
+            <select id="bt-service" name="service" class="w-full bg-surface rounded-lg border border-outline-variant px-4 py-3 focus:border-secondary outline-none transition-colors [color-scheme:light]">
+              <option value="">Select a service…</option>
+              <option value="custom-production">Custom Event Production</option>
+              <option value="floral-balloon">Floral &amp; Balloon Installation</option>
+              <option value="lighting">Lighting Design</option>
+              <option value="bouquets">Hand-tied Bouquets</option>
+              <option value="surprise">Surprise / Balloons</option>
+              <option value="gifting">Curated Gifting</option>
+              <option value="corporate">Corporate Event</option>
+              <option value="other">Something else</option>
+            </select>
+            <p class="field-error" aria-live="polite"></p>
+          </div>
+          <div>
+            <label for="bt-message" class="block text-[12px] font-semibold tracking-[0.18em] uppercase text-on-surface-variant mb-2">Tell us about your event *</label>
+            <textarea id="bt-message" name="message" rows="4" class="w-full bg-surface rounded-lg border border-outline-variant px-4 py-3 focus:border-secondary outline-none transition-colors resize-y" placeholder="Occasion, date, venue, guest count, theme, budget range…"></textarea>
+            <p class="field-error" aria-live="polite"></p>
+          </div>
+          <button type="submit" class="w-full md:w-auto inline-flex items-center justify-center gap-2 btn-pill px-12 py-4 bg-secondary text-on-secondary text-[12px] font-semibold tracking-wide uppercase hover:bg-secondary-fixed transition-colors active:scale-95">Request a Proposal<span class="material-symbols-outlined text-[18px]">arrow_forward</span></button>
+          <p data-form-status role="status" aria-live="polite" class="text-sm"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= CTA ======================= -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 z-0"><div data-bg="bt.cta" class="w-full h-full bg-cover bg-center" style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuAFqMh_vvhJGUadDYwyKlmesuwGFtGv6Qcfgq3TDw_G_2fs6EMyjHV79mQ0mHY2glbiB28FNzIhfCp8RYkDoxKAwfI4RAkNRYKx1S53tejwTgUS4bHqZxIAyj45Q1AziEeBkhLIDu3h7_cb0Yvp9pdzdTHIBkU8dishzCnd_P0sz7bZNDgzk8KDpVlTAZFNLIcN-c-8J6p1zBM7LS9HzE3Io69yi8xpI526X7SrvSkhjDqLg89gqsvryS7Brz0tzpAXJfTqkQvokTg')"></div><div class="absolute inset-0" style="background-image:linear-gradient(to right, rgba(26,12,18,0.92), rgba(122,51,80,0.55));"></div></div>
+    <span class="bt-balloon tone-blush hidden md:block z-[1]" style="width:60px;height:74px;right:12%;top:24%;animation-delay:.4s" aria-hidden="true"></span>
+    <div class="relative z-10 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-24 md:py-section-gap">
+      <div class="max-w-2xl reveal-up">
+        <h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-white mb-7 leading-[1.05]" data-text="tbt.cta_title">Let&rsquo;s make it unforgettable.</h2>
+        <a href="#book" data-magnetic class="inline-flex items-center gap-2 btn-pill px-10 py-4 bg-secondary text-on-secondary text-[12px] font-semibold tracking-wide uppercase hover:bg-secondary-fixed transition-all duration-300 active:scale-95">Start Planning<span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+<script src="assets/js/components.js"></script>
+<script src="assets/js/content.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

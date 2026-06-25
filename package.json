@@ -1,0 +1,9 @@
+{
+  "name": "the-lense-perspective",
+  "version": "2.0.0",
+  "private": true,
+  "description": "The Lens Perspective Photography & TBT Events — static site + Netlify functions (Blobs-backed CMS).",
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}

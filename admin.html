@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" type="image/png" href="assets/img/favicon.png">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta name="robots" content="noindex,nofollow">
+<title>Studio Manager — The Lens Perspective Photography &amp; TBT Events</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="assets/js/tailwind.config.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+<script src="assets/js/auth.js"></script>
+<script>/* gate: bounce to login if not authenticated */ if (window.TLP_AUTH) TLP_AUTH.requireAuth();</script>
+<script src="assets/js/content.js"></script>
+<style>
+  body { cursor: auto; background: #f4ede5; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'opsz' 24; }
+  ::-webkit-scrollbar { width: 11px; height: 11px; }
+  ::-webkit-scrollbar-thumb { background: #d8cabd; border-radius: 99px; border: 3px solid #f4ede5; }
+  ::-webkit-scrollbar-thumb:hover { background: #c2415c; }
+  .nav-link { transition: background .18s ease, color .18s ease; }
+  .nav-link[aria-current="true"] { background: rgba(255,255,255,.10); color: #fff; }
+  .nav-link[aria-current="true"] .nav-ico { color: #f1b8c4; }
+  .slot { transition: box-shadow .2s ease, border-color .2s ease, transform .2s ease; }
+  .slot.drag-over { border-color: #c2415c; box-shadow: 0 0 0 3px rgba(194,65,92,.18); transform: translateY(-2px); }
+  .slot.is-custom { border-color: rgba(194,65,92,.35); }
+  .toast { transition: opacity .3s ease, transform .3s ease; }
+  .seg { transition: color .18s ease, background .18s ease; }
+  .switch { width: 42px; height: 24px; border-radius: 99px; background: #d8cabd; position: relative; transition: background .2s ease; flex: none; }
+  .switch::after { content:""; position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:99px; background:#fff; transition: transform .2s ease; box-shadow: 0 1px 3px rgba(0,0,0,.25); }
+  .switch[aria-checked="true"] { background: #c2415c; }
+  .switch[aria-checked="true"]::after { transform: translateX(18px); }
+  .fade-in { animation: fadeIn .35s ease both; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .spin { animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  [data-section] { display: none; }
+  [data-section].active { display: block; }
+  .chip-btn { transition: all .15s ease; }
+</style>
+</head>
+<body class="font-body-md text-body-md text-on-background min-h-screen">
+
+<div class="flex min-h-screen">
+
+  <!-- ============================ SIDEBAR (desktop) ============================ -->
+  <aside class="hidden lg:flex w-[248px] shrink-0 flex-col bg-primary text-on-primary fixed inset-y-0 left-0 z-40">
+    <div class="px-6 pt-7 pb-6 border-b border-white/10">
+      <p class="text-[11px] font-semibold tracking-[0.28em] uppercase text-inverse-primary mb-2">Studio Manager</p>
+      <h1 class="font-headline-md text-[19px] leading-snug text-white">Lens Perspective <span class="text-inverse-primary">&amp;</span> TBT Events</h1>
+    </div>
+    <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto" id="sideNav">
+      <button class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-[14px] font-medium text-white/70 hover:text-white" data-nav="overview" aria-current="true"><span class="nav-ico material-symbols-outlined text-white/50 text-[20px]">dashboard</span>Overview</button>
+      <button class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-[14px] font-medium text-white/70 hover:text-white" data-nav="images"><span class="nav-ico material-symbols-outlined text-white/50 text-[20px]">image</span>Photos<span id="navImgCount" class="ml-auto text-[11px] font-semibold bg-white/10 rounded-full px-2 py-0.5"></span></button>
+      <button class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-[14px] font-medium text-white/70 hover:text-white" data-nav="galleries"><span class="nav-ico material-symbols-outlined text-white/50 text-[20px]">collections</span>Galleries<span id="navGalCount" class="ml-auto text-[11px] font-semibold bg-white/10 rounded-full px-2 py-0.5"></span></button>
+      <button class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-[14px] font-medium text-white/70 hover:text-white" data-nav="text"><span class="nav-ico material-symbols-outlined text-white/50 text-[20px]">edit_note</span>Text &amp; details<span id="navTxtCount" class="ml-auto text-[11px] font-semibold bg-white/10 rounded-full px-2 py-0.5"></span></button>
+      <button class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-[14px] font-medium text-white/70 hover:text-white" data-nav="enquiries"><span class="nav-ico material-symbols-outlined text-white/50 text-[20px]">mail</span>Enquiries</button>
+      <button class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-[14px] font-medium text-white/70 hover:text-white" data-nav="help"><span class="nav-ico material-symbols-outlined text-white/50 text-[20px]">help</span>How it works</button>
+    </nav>
+    <div class="px-3 py-4 border-t border-white/10 space-y-1">
+      <a href="index.html" target="_blank" class="nav-link w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-[13px] font-medium text-white/70 hover:text-white"><span class="material-symbols-outlined text-white/50 text-[19px]">open_in_new</span>View live site</a>
+      <button id="logoutBtn" class="nav-link w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-[13px] font-medium text-white/70 hover:text-white"><span class="material-symbols-outlined text-white/50 text-[19px]">logout</span>Log out</button>
+    </div>
+  </aside>
+
+  <!-- ============================ MAIN ============================ -->
+  <div class="flex-1 lg:ml-[248px] min-w-0 flex flex-col">
+
+    <!-- top bar: mobile brand + action bar -->
+    <header class="sticky top-0 z-30 bg-background/90 backdrop-blur-md border-b border-outline-variant">
+      <!-- mobile brand row -->
+      <div class="lg:hidden flex items-center justify-between px-5 py-3 border-b border-outline-variant">
+        <div>
+          <p class="text-[10px] font-semibold tracking-[0.24em] uppercase text-secondary">Studio Manager</p>
+          <h1 class="font-headline-md text-[16px] text-on-background leading-tight">Lens Perspective &amp; TBT</h1>
+        </div>
+        <div class="flex items-center gap-1">
+          <a href="index.html" target="_blank" class="p-2 text-on-surface-variant hover:text-secondary" aria-label="View site"><span class="material-symbols-outlined text-[22px]">open_in_new</span></a>
+          <button id="logoutBtnM" class="p-2 text-on-surface-variant hover:text-secondary" aria-label="Log out"><span class="material-symbols-outlined text-[22px]">logout</span></button>
+        </div>
+      </div>
+      <!-- action bar -->
+      <div class="flex items-center gap-3 px-5 lg:px-8 py-3">
+        <div id="statusChip" class="flex items-center gap-2 text-[12.5px] font-semibold rounded-full px-3.5 py-1.5 bg-surface-container text-on-surface-variant">
+          <span class="material-symbols-outlined text-[16px]">check_circle</span><span id="statusText">No changes</span>
+        </div>
+        <div class="flex-1"></div>
+        <button id="saveBtn" class="group flex items-center gap-2 px-4 lg:px-5 py-2.5 rounded-full border border-outline-variant bg-surface text-on-surface text-[12.5px] font-semibold hover:border-secondary hover:text-secondary transition-colors">
+          <span class="material-symbols-outlined text-[18px]">visibility</span><span class="hidden sm:inline">Save preview</span><span class="sm:hidden">Save</span>
+        </button>
+        <button id="publishBtn" class="flex items-center gap-2 px-4 lg:px-6 py-2.5 rounded-full bg-secondary text-on-secondary text-[12.5px] font-bold hover:bg-secondary-fixed transition-colors shadow-sm">
+          <span class="material-symbols-outlined text-[18px]">rocket_launch</span><span class="hidden sm:inline">Publish live</span><span class="sm:hidden">Publish</span>
+        </button>
+      </div>
+      <!-- mobile section tabs -->
+      <nav class="lg:hidden flex gap-1 px-3 pb-2 overflow-x-auto" id="tabNav">
+        <button class="seg shrink-0 px-3.5 py-2 rounded-full text-[13px] font-semibold text-on-surface-variant" data-nav="overview">Overview</button>
+        <button class="seg shrink-0 px-3.5 py-2 rounded-full text-[13px] font-semibold text-on-surface-variant" data-nav="images">Photos</button>
+        <button class="seg shrink-0 px-3.5 py-2 rounded-full text-[13px] font-semibold text-on-surface-variant" data-nav="galleries">Galleries</button>
+        <button class="seg shrink-0 px-3.5 py-2 rounded-full text-[13px] font-semibold text-on-surface-variant" data-nav="text">Text</button>
+        <button class="seg shrink-0 px-3.5 py-2 rounded-full text-[13px] font-semibold text-on-surface-variant" data-nav="enquiries">Enquiries</button>
+        <button class="seg shrink-0 px-3.5 py-2 rounded-full text-[13px] font-semibold text-on-surface-variant" data-nav="help">Help</button>
+      </nav>
+    </header>
+
+    <main class="flex-1 px-5 lg:px-8 py-7 lg:py-9 max-w-[1180px] w-full">
+
+      <!-- ===================== OVERVIEW ===================== -->
+      <section data-section="overview" class="active">
+        <p class="font-label-caps text-label-caps text-secondary mb-2">Welcome back</p>
+        <h2 class="font-headline-lg text-[34px] lg:text-[42px] text-on-background mb-2 leading-none">Your studio, at a glance.</h2>
+        <p class="text-on-surface-variant max-w-2xl mb-8">Swap any photo, edit any wording, and reply to enquiries — all in one place. Changes preview privately until you <strong class="text-on-background">Publish live</strong>.</p>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+          <div class="bg-surface rounded-2xl border border-outline-variant p-5">
+            <span class="material-symbols-outlined text-secondary text-[26px] mb-3">image</span>
+            <p id="statCustomImg" class="font-headline-md text-[30px] text-on-background leading-none">0</p>
+            <p class="text-on-surface-variant text-[13px] mt-1">photos customised</p>
+          </div>
+          <div class="bg-surface rounded-2xl border border-outline-variant p-5">
+            <span class="material-symbols-outlined text-secondary text-[26px] mb-3">edit_note</span>
+            <p id="statCustomTxt" class="font-headline-md text-[30px] text-on-background leading-none">0</p>
+            <p class="text-on-surface-variant text-[13px] mt-1">text fields edited</p>
+          </div>
+          <div class="bg-surface rounded-2xl border border-outline-variant p-5">
+            <span class="material-symbols-outlined text-secondary text-[26px] mb-3">collections</span>
+            <p id="statTotalImg" class="font-headline-md text-[30px] text-on-background leading-none">0</p>
+            <p class="text-on-surface-variant text-[13px] mt-1">photo slots total</p>
+          </div>
+          <div class="bg-surface rounded-2xl border border-outline-variant p-5">
+            <span class="material-symbols-outlined text-secondary text-[26px] mb-3">mail</span>
+            <p id="statEnq" class="font-headline-md text-[30px] text-on-background leading-none">—</p>
+            <p class="text-on-surface-variant text-[13px] mt-1">enquiries</p>
+          </div>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-5">
+          <button data-jump="images" class="text-left bg-surface rounded-2xl border border-outline-variant p-6 hover:border-secondary transition-colors group">
+            <div class="flex items-center justify-between mb-3"><span class="material-symbols-outlined text-secondary text-[28px]">add_photo_alternate</span><span class="material-symbols-outlined text-on-surface-variant/40 group-hover:text-secondary group-hover:translate-x-1 transition-all">arrow_forward</span></div>
+            <h3 class="font-headline-md text-[20px] text-on-background mb-1">Manage photos</h3>
+            <p class="text-on-surface-variant text-[13.5px]">Drag &amp; drop, upload, or paste a link. Search and bulk-reset slots.</p>
+          </button>
+          <button data-jump="text" class="text-left bg-surface rounded-2xl border border-outline-variant p-6 hover:border-secondary transition-colors group">
+            <div class="flex items-center justify-between mb-3"><span class="material-symbols-outlined text-secondary text-[28px]">drive_file_rename_outline</span><span class="material-symbols-outlined text-on-surface-variant/40 group-hover:text-secondary group-hover:translate-x-1 transition-all">arrow_forward</span></div>
+            <h3 class="font-headline-md text-[20px] text-on-background mb-1">Edit text &amp; contact details</h3>
+            <p class="text-on-surface-variant text-[13.5px]">Names, taglines, email, phone, Instagram &amp; WhatsApp links.</p>
+          </button>
+        </div>
+
+        <div class="mt-8 bg-surface rounded-2xl border border-outline-variant overflow-hidden">
+          <div class="flex items-start gap-4 p-5 lg:p-6">
+            <span id="hostDot" class="material-symbols-outlined text-[24px] text-tertiary mt-0.5">cloud_done</span>
+            <div class="flex-1">
+              <p class="font-semibold text-on-background text-[15px]">Photo hosting is built in — no setup needed</p>
+              <p id="hostMsg" class="text-on-surface-variant text-[13.5px] mt-1 leading-relaxed">Upload full-quality photos straight from your phone or computer. They're stored on your site and shown on every device. No Cloudinary, no accounts, no size juggling.</p>
+            </div>
+          </div>
+        </div>
+        <p id="storeWarn" class="text-error text-[13px] mt-4 hidden"></p>
+      </section>
+
+      <!-- ===================== IMAGES ===================== -->
+      <section data-section="images">
+        <div class="flex items-end justify-between gap-4 flex-wrap mb-5">
+          <div>
+            <p class="font-label-caps text-label-caps text-secondary mb-2">Photos</p>
+            <h2 class="font-headline-lg text-[30px] lg:text-[38px] text-on-background leading-none">Manage every image</h2>
+          </div>
+        </div>
+
+        <!-- toolbar -->
+        <div class="bg-surface rounded-2xl border border-outline-variant p-4 mb-6 sticky top-[112px] lg:top-[68px] z-20">
+          <div class="flex flex-col lg:flex-row gap-3 lg:items-center">
+            <div class="relative flex-1 min-w-0">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-[20px]">search</span>
+              <input id="imgSearch" type="text" placeholder="Search photos by page or name…" class="w-full bg-surface-container/60 rounded-xl border border-outline-variant pl-10 pr-3 py-2.5 text-sm focus:border-secondary outline-none transition-colors">
+            </div>
+            <select id="imgGroupFilter" class="bg-surface-container/60 rounded-xl border border-outline-variant px-3 py-2.5 text-sm focus:border-secondary outline-none transition-colors"></select>
+            <button id="imgCustomOnly" class="chip-btn flex items-center gap-2 px-4 py-2.5 rounded-xl border border-outline-variant text-sm font-semibold text-on-surface-variant hover:border-secondary" aria-pressed="false">
+              <span class="material-symbols-outlined text-[18px]">filter_alt</span>Customised only
+            </button>
+          </div>
+          <!-- bulk bar -->
+          <div id="bulkBar" class="hidden mt-3 pt-3 border-t border-outline-variant flex-wrap items-center gap-3">
+            <span id="bulkCount" class="text-sm font-semibold text-on-background"></span>
+            <div class="flex-1"></div>
+            <button id="bulkReset" class="flex items-center gap-1.5 px-4 py-2 rounded-full bg-error/10 text-error text-[12.5px] font-semibold hover:bg-error/20 transition-colors"><span class="material-symbols-outlined text-[17px]">restart_alt</span>Reset selected</button>
+            <button id="bulkClear" class="px-4 py-2 text-on-surface-variant text-[12.5px] font-semibold hover:text-on-background">Clear</button>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between mb-4">
+          <p id="imgResultCount" class="text-on-surface-variant text-[13px]"></p>
+          <button id="resetAllImg" class="text-error text-[12.5px] font-semibold hover:underline flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">restart_alt</span>Reset all photos</button>
+        </div>
+
+        <div id="imgGroups" class="space-y-10"></div>
+        <p id="imgEmpty" class="hidden text-center text-on-surface-variant py-16">No photos match your search.</p>
+      </section>
+
+      <!-- ===================== GALLERIES ===================== -->
+      <section data-section="galleries">
+        <p class="font-label-caps text-label-caps text-secondary mb-2">Galleries</p>
+        <h2 class="font-headline-lg text-[30px] lg:text-[38px] text-on-background leading-none mb-3">Add &amp; arrange photos</h2>
+        <p class="text-on-surface-variant max-w-2xl mb-8">These sections hold <strong class="text-on-background">any number of photos</strong> — add (upload, drag-and-drop, or paste a link), delete, and drag to reorder. They appear on the page the moment you <strong class="text-on-background">Publish</strong>. No fixed placeholders.</p>
+        <div id="galleryGroups" class="space-y-10"></div>
+      </section>
+
+      <!-- ===================== TEXT ===================== -->
+      <section data-section="text">
+        <p class="font-label-caps text-label-caps text-secondary mb-2">Text &amp; details</p>
+        <h2 class="font-headline-lg text-[30px] lg:text-[38px] text-on-background leading-none mb-5">Words &amp; contact info</h2>
+        <div class="bg-surface rounded-2xl border border-outline-variant p-4 mb-6 sticky top-[112px] lg:top-[68px] z-20">
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-[20px]">search</span>
+            <input id="txtSearch" type="text" placeholder="Search fields…" class="w-full bg-surface-container/60 rounded-xl border border-outline-variant pl-10 pr-3 py-2.5 text-sm focus:border-secondary outline-none transition-colors">
+          </div>
+        </div>
+        <div id="textGroups" class="space-y-8"></div>
+        <p id="txtEmpty" class="hidden text-center text-on-surface-variant py-16">No fields match your search.</p>
+      </section>
+
+      <!-- ===================== ENQUIRIES ===================== -->
+      <section data-section="enquiries">
+        <div class="flex items-end justify-between gap-4 flex-wrap mb-5">
+          <div>
+            <p class="font-label-caps text-label-caps text-secondary mb-2">Enquiries</p>
+            <h2 class="font-headline-lg text-[30px] lg:text-[38px] text-on-background leading-none">Booking enquiries</h2>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="enqRefresh" class="flex items-center gap-1.5 px-4 py-2.5 rounded-full border border-outline-variant text-on-surface text-[12.5px] font-semibold hover:border-secondary hover:text-secondary transition-colors"><span class="material-symbols-outlined text-[18px]">refresh</span>Refresh</button>
+            <button id="enqExport" class="flex items-center gap-1.5 px-4 py-2.5 rounded-full border border-outline-variant text-on-surface text-[12.5px] font-semibold hover:border-secondary hover:text-secondary transition-colors"><span class="material-symbols-outlined text-[18px]">download</span>CSV</button>
+          </div>
+        </div>
+        <div class="bg-surface rounded-2xl border border-outline-variant p-4 mb-6 flex flex-col sm:flex-row gap-3 sm:items-center">
+          <div class="relative flex-1">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-[20px]">search</span>
+            <input id="enqSearch" type="text" placeholder="Search name, email, message…" class="w-full bg-surface-container/60 rounded-xl border border-outline-variant pl-10 pr-3 py-2.5 text-sm focus:border-secondary outline-none transition-colors">
+          </div>
+          <div class="flex gap-1 bg-surface-container/60 rounded-xl p-1" id="enqFormFilter">
+            <button class="seg px-3.5 py-1.5 rounded-lg text-[12.5px] font-semibold text-on-background bg-surface shadow-sm" data-form="all">All</button>
+            <button class="seg px-3.5 py-1.5 rounded-lg text-[12.5px] font-semibold text-on-surface-variant" data-form="lense-booking">Lens</button>
+            <button class="seg px-3.5 py-1.5 rounded-lg text-[12.5px] font-semibold text-on-surface-variant" data-form="balloon-tales-booking">TBT</button>
+          </div>
+        </div>
+        <p id="enqCount" class="text-on-surface-variant text-[13px] mb-4"></p>
+        <div id="enquiriesList" class="space-y-4"><p class="text-on-surface-variant text-sm">Loading enquiries…</p></div>
+      </section>
+
+      <!-- ===================== HELP ===================== -->
+      <section data-section="help">
+        <p class="font-label-caps text-label-caps text-secondary mb-2">How it works</p>
+        <h2 class="font-headline-lg text-[30px] lg:text-[38px] text-on-background leading-none mb-8">Two buttons, that's it.</h2>
+
+        <div class="grid md:grid-cols-2 gap-5 mb-10">
+          <div class="bg-surface rounded-2xl border border-outline-variant p-6">
+            <div class="flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-on-surface-variant">visibility</span><h3 class="font-headline-md text-[20px] text-on-background">Save preview</h3></div>
+            <p class="text-on-surface-variant text-[14px] leading-relaxed">Stores your edits <strong class="text-on-background">in this browser only</strong>. Perfect for checking how things look before going live. Nobody else sees these — open the site in this same browser to preview.</p>
+          </div>
+          <div class="bg-surface rounded-2xl border-2 border-secondary p-6">
+            <div class="flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-secondary">rocket_launch</span><h3 class="font-headline-md text-[20px] text-on-background">Publish live</h3></div>
+            <p class="text-on-surface-variant text-[14px] leading-relaxed">Makes your edits show for <strong class="text-on-background">everyone, on every device</strong> — phones included. Saves to your site instantly. No files, no redeploy. Visitors see it on their next page load.</p>
+          </div>
+        </div>
+
+        <div class="bg-surface rounded-2xl border border-outline-variant p-6 mb-5">
+          <h3 class="font-headline-md text-[19px] text-on-background mb-3">Adding photos</h3>
+          <ul class="space-y-2.5 text-on-surface-variant text-[14px]">
+            <li class="flex gap-3"><span class="material-symbols-outlined text-secondary text-[20px]">drag_pan</span><span><strong class="text-on-background">Drag &amp; drop</strong> an image file straight onto any photo slot.</span></li>
+            <li class="flex gap-3"><span class="material-symbols-outlined text-secondary text-[20px]">upload</span><span><strong class="text-on-background">Upload</strong> from your phone or computer — full quality, no size limit.</span></li>
+            <li class="flex gap-3"><span class="material-symbols-outlined text-secondary text-[20px]">link</span><span><strong class="text-on-background">Paste a link</strong> to any image hosted online.</span></li>
+          </ul>
+          <p class="text-on-surface-variant/70 text-[13px] mt-4 leading-relaxed">Photos are stored on your own site automatically (built-in hosting) — there's nothing to set up and no Cloudinary account required anymore.</p>
+        </div>
+
+        <div class="bg-surface rounded-2xl border border-outline-variant p-6">
+          <h3 class="font-headline-md text-[19px] text-on-background mb-3">Backup &amp; restore</h3>
+          <p class="text-on-surface-variant text-[14px] mb-4">Export a copy of all your settings, or import one to move them to another computer.</p>
+          <div class="flex flex-wrap gap-3">
+            <button id="exportBtn" class="flex items-center gap-1.5 px-4 py-2.5 rounded-full border border-outline-variant text-on-surface text-[12.5px] font-semibold hover:border-secondary hover:text-secondary transition-colors"><span class="material-symbols-outlined text-[18px]">download</span>Export settings</button>
+            <label class="flex items-center gap-1.5 px-4 py-2.5 rounded-full border border-outline-variant text-on-surface text-[12.5px] font-semibold hover:border-secondary hover:text-secondary transition-colors cursor-pointer"><span class="material-symbols-outlined text-[18px]">upload_file</span>Import settings<input id="importInput" type="file" accept="application/json" class="hidden"></label>
+          </div>
+          <p class="text-on-surface-variant/60 text-[12px] mt-5">Logged in as <strong>admin</strong>. To change the password, see the README (auth.js).</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div id="toast" class="toast fixed bottom-6 left-1/2 -translate-x-1/2 opacity-0 translate-y-3 pointer-events-none bg-on-background text-background px-6 py-3.5 text-[13px] font-semibold z-50 rounded-full shadow-xl flex items-center gap-2 max-w-[90vw]"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------------- data + state ---------------- */
+  var IMG_KEY = "tlp_images", TXT_KEY = "tlp_text", GAL_KEY = "tlp_galleries", PUBCACHE = "tlp_pub_cache";
+  var imageGroups = window.TLP_IMAGE_GROUPS || [];
+  var imageDefaults = window.TLP_IMAGE_DEFAULTS || {};
+  var textGroups = window.TLP_TEXT_GROUPS || [];
+  var overrides = read(IMG_KEY);
+  var textOverrides = read(TXT_KEY);
+  var galleries = read(GAL_KEY);
+  var selected = {};               // key -> true (bulk select)
+  var dirty = false, unpublished = false;
+
+  var REMOVED = "__removed__";
+  function read(k) { try { return JSON.parse(localStorage.getItem(k) || "{}"); } catch (e) { return {}; } }
+  function adminKey() { try { return sessionStorage.getItem("tlp_admin_key") || ""; } catch (e) { return ""; } }
+  function isRemoved(key) { return overrides[key] === REMOVED; }
+  function currentSrc(key) { if (overrides[key] === REMOVED) return ""; return overrides[key] || imageDefaults[key] || ""; }
+  function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function countCustom(o) { return Object.keys(o).filter(function (k) { return o[k]; }).length; }
+
+  /* ---------------- toast ---------------- */
+  var toastEl = document.getElementById("toast");
+  function toast(msg, kind) {
+    var icon = kind === "error" ? "error" : kind === "work" ? "progress_activity" : "check_circle";
+    toastEl.innerHTML = '<span class="material-symbols-outlined text-[18px]' + (kind === "work" ? " spin" : "") + '">' + icon + '</span><span>' + esc(msg) + '</span>';
+    toastEl.style.background = kind === "error" ? "#b3261e" : "";
+    toastEl.style.color = kind === "error" ? "#fff" : "";
+    toastEl.classList.remove("opacity-0", "translate-y-3");
+    clearTimeout(toastEl._t);
+    if (kind !== "work") toastEl._t = setTimeout(function () { toastEl.classList.add("opacity-0", "translate-y-3"); }, kind === "error" ? 5600 : 2800);
+  }
+
+  /* ---------------- status chip ---------------- */
+  var statusChip = document.getElementById("statusChip"), statusText = document.getElementById("statusText");
+  function setStatus() {
+    var cls = "flex items-center gap-2 text-[12.5px] font-semibold rounded-full px-3.5 py-1.5 ";
+    var ico = statusChip.querySelector(".material-symbols-outlined");
+    if (dirty) { statusChip.className = cls + "bg-amber-500/15 text-amber-700"; ico.textContent = "edit"; statusText.textContent = "Unsaved changes"; }
+    else if (unpublished) { statusChip.className = cls + "bg-secondary/12 text-secondary"; ico.textContent = "schedule"; statusText.textContent = "Saved — preview only"; }
+    else { statusChip.className = cls + "bg-tertiary/12 text-tertiary"; ico.textContent = "check_circle"; statusText.textContent = "Published — live"; }
+  }
+  function markDirty() { dirty = true; setStatus(); updateStats(); }
+
+  /* ---------------- navigation ---------------- */
+  var sections = document.querySelectorAll("[data-section]");
+  function go(name) {
+    sections.forEach(function (s) { s.classList.toggle("active", s.getAttribute("data-section") === name); });
+    document.querySelectorAll("[data-nav]").forEach(function (b) {
+      var on = b.getAttribute("data-nav") === name;
+      if (b.closest("#sideNav")) b.setAttribute("aria-current", on ? "true" : "false");
+      else { b.classList.toggle("bg-surface", on); b.classList.toggle("shadow-sm", on); b.classList.toggle("text-on-background", on); b.classList.toggle("text-on-surface-variant", !on); }
+    });
+    window.scrollTo(0, 0);
+    if (name === "enquiries") enqEnsure();
+  }
+  document.querySelectorAll("[data-nav]").forEach(function (b) { b.addEventListener("click", function () { go(b.getAttribute("data-nav")); }); });
+  document.querySelectorAll("[data-jump]").forEach(function (b) { b.addEventListener("click", function () { go(b.getAttribute("data-jump")); }); });
+
+  /* ---------------- image compression ---------------- */
+  function compress(file, maxDim, quality) {
+    return new Promise(function (resolve, reject) {
+      var img = new Image(), url = URL.createObjectURL(file);
+      img.onload = function () {
+        URL.revokeObjectURL(url);
+        var w = img.naturalWidth || 1, h = img.naturalHeight || 1;
+        var scale = Math.min(1, maxDim / Math.max(w, h));
+        var cw = Math.max(1, Math.round(w * scale)), ch = Math.max(1, Math.round(h * scale));
+        var c = document.createElement("canvas"); c.width = cw; c.height = ch;
+        c.getContext("2d").drawImage(img, 0, 0, cw, ch);
+        try { resolve(c.toDataURL("image/jpeg", quality)); } catch (e) { reject(e); }
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error("Could not read that image.")); };
+      img.src = url;
+    });
+  }
+
+  // Upload: try server (Netlify Blobs) → returns hosted URL.
+  // Fallback (local preview / offline): a compact data URL stored locally so the preview still works.
+  function uploadFile(file) {
+    if (!/^image\//.test(file.type)) return Promise.reject(new Error("That's not an image file."));
+    return compress(file, 4000, 0.92).then(function (dataUrl) {
+      return fetch("/.netlify/functions/media", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-key": adminKey() },
+        body: JSON.stringify({ dataUrl: dataUrl, name: file.name })
+      }).then(function (r) { return r.ok ? r.json() : Promise.reject(new Error("server")); })
+        .then(function (j) { if (j && j.url) return { url: j.url, hosted: true }; throw new Error("server"); })
+        .catch(function () {
+          // No server here — keep a smaller data URL locally for preview.
+          return compress(file, 1400, 0.72).then(function (small) { return { url: small, hosted: false }; });
+        });
+    });
+  }
+
+  /* ================= IMAGES UI ================= */
+  var imgHost = document.getElementById("imgGroups");
+  var imgSearch = document.getElementById("imgSearch");
+  var imgGroupFilter = document.getElementById("imgGroupFilter");
+  var imgCustomOnly = document.getElementById("imgCustomOnly");
+  var customOnly = false;
+
+  // group filter options
+  imgGroupFilter.innerHTML = '<option value="">All pages</option>' + imageGroups.map(function (g) { return '<option value="' + esc(g.page) + '">' + esc(g.page) + '</option>'; }).join("");
+
+  function slotCard(s) {
+    var removed = isRemoved(s.key);
+    var custom = !!overrides[s.key] && !removed;
+    var urlVal = (custom && overrides[s.key].indexOf("data:") !== 0 && overrides[s.key].indexOf("/.netlify") !== 0) ? overrides[s.key] : "";
+    var badgeTxt = removed ? "HIDDEN" : (custom ? "CUSTOM" : "DEFAULT");
+    var badgeCls = removed ? "bg-error/12 text-error" : (custom ? "bg-secondary/15 text-secondary" : "bg-surface-container text-on-surface-variant/60");
+    return '<div class="slot bg-surface border border-outline-variant rounded-2xl p-3.5 flex gap-4 ' + (custom ? "is-custom " : "") + (removed ? "opacity-70 " : "") + '" data-key="' + esc(s.key) + '" data-page="' + esc(s.page) + '" data-label="' + esc(s.label.toLowerCase()) + '">' +
+      '<label class="relative w-28 h-28 shrink-0 rounded-xl overflow-hidden bg-surface-container border border-outline-variant cursor-pointer group block">' +
+        '<img data-preview class="w-full h-full object-cover" alt="" src="' + esc(currentSrc(s.key)) + '" style="' + (removed ? "display:none" : "") + '">' +
+        '<span data-removed-ph class="' + (removed ? "flex" : "hidden") + ' absolute inset-0 flex-col items-center justify-center gap-0.5 text-on-surface-variant/55 text-[10px] font-semibold text-center px-1"><span class="material-symbols-outlined text-[22px]">hide_image</span>Hidden</span>' +
+        '<input data-file type="file" accept="image/*" class="hidden">' +
+        '<span data-drop class="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-on-background/0 group-hover:bg-on-background/55 text-background opacity-0 group-hover:opacity-100 transition-all text-[11px] font-semibold">' +
+          '<span class="material-symbols-outlined text-[22px]">add_photo_alternate</span>Drop / upload</span>' +
+        '<span data-busy class="hidden absolute inset-0 items-center justify-center bg-on-background/65 text-background"><span class="material-symbols-outlined spin text-[26px]">progress_activity</span></span>' +
+      '</label>' +
+      '<div class="flex-1 min-w-0">' +
+        '<div class="flex items-start justify-between gap-2 mb-1.5">' +
+          '<div class="min-w-0"><p class="text-[14px] font-semibold text-on-background truncate">' + esc(s.label) + '</p>' +
+          '<p class="text-on-surface-variant/55 text-[11px] font-mono truncate">' + esc(s.key) + '</p></div>' +
+          '<label class="shrink-0 mt-0.5"><input data-select type="checkbox" class="sr-only peer"><span class="material-symbols-outlined text-[20px] text-on-surface-variant/30 peer-checked:text-secondary cursor-pointer select-none">check_circle</span></label>' +
+        '</div>' +
+        '<span data-badge class="inline-block text-[10px] font-bold tracking-wide px-2 py-0.5 rounded-full mb-2 ' + badgeCls + '">' + badgeTxt + '</span>' +
+        '<div class="flex items-center gap-2">' +
+          '<input data-url type="url" placeholder="Paste image link…" value="' + esc(urlVal) + '" class="flex-1 min-w-0 bg-surface-container/50 rounded-lg border border-outline-variant px-3 py-2 text-[13px] focus:border-secondary outline-none transition-colors">' +
+          '<button data-lib type="button" title="Choose from library" class="shrink-0 p-2 text-on-surface-variant/60 hover:text-secondary rounded-lg hover:bg-secondary/8 transition-colors"><span class="material-symbols-outlined text-[19px]">photo_library</span></button>' +
+          '<button data-remove type="button" title="' + (removed ? "Show again" : "Remove from site (hide it)") + '" class="shrink-0 p-2 rounded-lg transition-colors ' + (removed ? "text-error bg-error/10" : "text-on-surface-variant/60 hover:text-error hover:bg-error/8") + '"><span class="material-symbols-outlined text-[19px]">' + (removed ? "visibility" : "visibility_off") + '</span></button>' +
+          '<button data-clear type="button" title="Reset to default" class="shrink-0 p-2 text-on-surface-variant/60 hover:text-secondary rounded-lg hover:bg-secondary/8 transition-colors"><span class="material-symbols-outlined text-[19px]">restart_alt</span></button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function renderImages() {
+    var q = (imgSearch.value || "").trim().toLowerCase();
+    var gf = imgGroupFilter.value;
+    var html = "", shown = 0;
+    imageGroups.forEach(function (group) {
+      if (gf && group.page !== gf) return;
+      var slots = group.slots.filter(function (s) {
+        if (customOnly && !overrides[s.key]) return false;
+        if (!q) return true;
+        return (s.label + " " + s.key + " " + group.page).toLowerCase().indexOf(q) !== -1;
+      });
+      if (!slots.length) return;
+      shown += slots.length;
+      html += '<section class="fade-in"><div class="flex items-center gap-3 mb-4"><h3 class="font-headline-md text-[21px] text-on-background">' + esc(group.page) + '</h3><span class="text-on-surface-variant/50 text-[12px] font-semibold">' + slots.length + '</span><div class="flex-1 h-px bg-outline-variant"></div></div>' +
+        '<div class="grid grid-cols-1 xl:grid-cols-2 gap-3.5">' + slots.map(function (s) { s.page = group.page; return slotCard(s); }).join("") + '</div></section>';
+    });
+    imgHost.innerHTML = html;
+    document.getElementById("imgEmpty").classList.toggle("hidden", shown > 0);
+    document.getElementById("imgResultCount").textContent = shown + " photo" + (shown === 1 ? "" : "s") + (q || gf || customOnly ? " shown" : " total") + " · " + countCustom(overrides) + " customised";
+    // restore selection state
+    document.querySelectorAll("#imgGroups [data-key]").forEach(function (card) {
+      var k = card.getAttribute("data-key");
+      var cb = card.querySelector("[data-select]"); if (cb) cb.checked = !!selected[k];
+    });
+    updateBulkBar();
+  }
+
+  function refreshCard(card, key) {
+    var removed = isRemoved(key);
+    var custom = !!overrides[key] && !removed;
+    var img = card.querySelector("[data-preview]");
+    img.src = currentSrc(key);
+    img.style.display = removed ? "none" : "";
+    var ph = card.querySelector("[data-removed-ph]");
+    if (ph) { ph.classList.toggle("hidden", !removed); ph.classList.toggle("flex", removed); }
+    var badge = card.querySelector("[data-badge]");
+    badge.textContent = removed ? "HIDDEN" : (custom ? "CUSTOM" : "DEFAULT");
+    badge.className = "inline-block text-[10px] font-bold tracking-wide px-2 py-0.5 rounded-full mb-2 " + (removed ? "bg-error/12 text-error" : (custom ? "bg-secondary/15 text-secondary" : "bg-surface-container text-on-surface-variant/60"));
+    card.classList.toggle("is-custom", custom);
+    card.classList.toggle("opacity-70", removed);
+    var rb = card.querySelector("[data-remove]");
+    if (rb) {
+      rb.querySelector(".material-symbols-outlined").textContent = removed ? "visibility" : "visibility_off";
+      rb.className = "shrink-0 p-2 rounded-lg transition-colors " + (removed ? "text-error bg-error/10" : "text-on-surface-variant/60 hover:text-error hover:bg-error/8");
+      rb.title = removed ? "Show again" : "Remove from site (hide it)";
+    }
+  }
+
+  function setBusy(card, on) {
+    var b = card.querySelector("[data-busy]");
+    if (b) { b.classList.toggle("hidden", !on); b.classList.toggle("flex", on); }
+  }
+
+  function applyFile(card, key, file) {
+    setBusy(card, true);
+    uploadFile(file).then(function (res) {
+      overrides[key] = res.url;
+      var ui = card.querySelector("[data-url]"); if (ui) ui.value = res.hosted ? "" : "";
+      refreshCard(card, key); setBusy(card, false); markDirty();
+      toast(res.hosted ? "Uploaded ✓ — Publish to go live everywhere." : "Added to preview ✓ — Publish on your live site to host it.");
+    }).catch(function (err) {
+      setBusy(card, false);
+      toast(err.message || "Upload failed.", "error");
+    });
+  }
+
+  // events: url input
+  imgHost.addEventListener("input", function (e) {
+    if (!e.target.matches("[data-url]")) return;
+    var card = e.target.closest("[data-key]"), key = card.getAttribute("data-key"), val = e.target.value.trim();
+    if (val) overrides[key] = val; else delete overrides[key];
+    refreshCard(card, key); markDirty();
+  });
+  // file picker
+  imgHost.addEventListener("change", function (e) {
+    if (e.target.matches("[data-file]")) {
+      var card = e.target.closest("[data-key]"), f = e.target.files && e.target.files[0];
+      if (f) applyFile(card, card.getAttribute("data-key"), f);
+      e.target.value = "";
+    } else if (e.target.matches("[data-select]")) {
+      var c = e.target.closest("[data-key]"), k = c.getAttribute("data-key");
+      if (e.target.checked) selected[k] = true; else delete selected[k];
+      updateBulkBar();
+    }
+  });
+  // remove (hide from site) / show again, reset-to-default, and library picker
+  imgHost.addEventListener("click", function (e) {
+    var lb = e.target.closest("[data-lib]");
+    if (lb) {
+      var lc = lb.closest("[data-key]"), lk = lc.getAttribute("data-key");
+      openLib(function (url) {
+        overrides[lk] = url;
+        var u = lc.querySelector("[data-url]"); if (u) u.value = (url.indexOf("data:") !== 0 && url.indexOf("/.netlify") !== 0) ? url : "";
+        refreshCard(lc, lk); markDirty(); toast("Selected from library.");
+      });
+      return;
+    }
+    var rm = e.target.closest("[data-remove]");
+    if (rm) {
+      var rc = rm.closest("[data-key]"), rk = rc.getAttribute("data-key");
+      if (isRemoved(rk)) delete overrides[rk];   // show again → reverts to default
+      else overrides[rk] = REMOVED;              // hide on the live site (no default)
+      var ru = rc.querySelector("[data-url]"); if (ru) ru.value = "";
+      refreshCard(rc, rk); markDirty();
+      toast(isRemoved(rk) ? "Photo will be hidden on the site after you Publish." : "Photo restored to default.");
+      return;
+    }
+    var cl = e.target.closest("[data-clear]"); if (!cl) return;
+    var card = cl.closest("[data-key]"), key = card.getAttribute("data-key");
+    delete overrides[key]; var u = card.querySelector("[data-url]"); if (u) u.value = "";
+    refreshCard(card, key); markDirty();
+  });
+  // drag & drop
+  ["dragenter", "dragover"].forEach(function (ev) {
+    imgHost.addEventListener(ev, function (e) {
+      var card = e.target.closest("[data-key]"); if (!card) return;
+      e.preventDefault(); card.classList.add("drag-over");
+    });
+  });
+  ["dragleave", "drop"].forEach(function (ev) {
+    imgHost.addEventListener(ev, function (e) {
+      var card = e.target.closest("[data-key]"); if (!card) return;
+      if (ev === "dragleave" && card.contains(e.relatedTarget)) return;
+      card.classList.remove("drag-over");
+      if (ev === "drop") {
+        e.preventDefault();
+        var dt = e.dataTransfer;
+        var f = dt && dt.files && dt.files[0];
+        if (f) { applyFile(card, card.getAttribute("data-key"), f); return; }
+        var uri = dt && (dt.getData("text/uri-list") || dt.getData("text/plain"));
+        if (uri) { var key = card.getAttribute("data-key"); overrides[key] = uri.trim(); var u = card.querySelector("[data-url]"); if (u) u.value = uri.trim(); refreshCard(card, key); markDirty(); }
+      }
+    });
+  });
+
+  // toolbar
+  imgSearch.addEventListener("input", renderImages);
+  imgGroupFilter.addEventListener("change", renderImages);
+  imgCustomOnly.addEventListener("click", function () {
+    customOnly = !customOnly;
+    imgCustomOnly.setAttribute("aria-pressed", String(customOnly));
+    imgCustomOnly.classList.toggle("border-secondary", customOnly);
+    imgCustomOnly.classList.toggle("text-secondary", customOnly);
+    imgCustomOnly.classList.toggle("bg-secondary/8", customOnly);
+    renderImages();
+  });
+
+  // bulk
+  var bulkBar = document.getElementById("bulkBar");
+  function updateBulkBar() {
+    var n = Object.keys(selected).length;
+    bulkBar.classList.toggle("hidden", n === 0);
+    bulkBar.classList.toggle("flex", n > 0);
+    document.getElementById("bulkCount").textContent = n + " selected";
+  }
+  document.getElementById("bulkClear").addEventListener("click", function () { selected = {}; renderImages(); });
+  document.getElementById("bulkReset").addEventListener("click", function () {
+    var n = Object.keys(selected).length; if (!n) return;
+    if (!confirm("Reset " + n + " selected photo" + (n === 1 ? "" : "s") + " back to default?")) return;
+    Object.keys(selected).forEach(function (k) { delete overrides[k]; });
+    selected = {}; renderImages(); markDirty(); toast("Reset " + n + " photo" + (n === 1 ? "" : "s") + ".");
+  });
+  document.getElementById("resetAllImg").addEventListener("click", function () {
+    if (!countCustom(overrides)) { toast("Nothing to reset — all photos are default."); return; }
+    if (!confirm("Reset ALL photos back to their defaults?")) return;
+    overrides = {}; selected = {}; renderImages(); markDirty(); toast("All photos reset to default.");
+  });
+
+  /* ================= TEXT UI ================= */
+  var txtHost = document.getElementById("textGroups");
+  var txtSearch = document.getElementById("txtSearch");
+  function renderText() {
+    var q = (txtSearch.value || "").trim().toLowerCase();
+    var html = "", shown = 0;
+    textGroups.forEach(function (group) {
+      var fields = group.fields.filter(function (f) { return !q || (f.label + " " + f.key).toLowerCase().indexOf(q) !== -1; });
+      if (!fields.length) return;
+      shown += fields.length;
+      var rows = fields.map(function (f) {
+        var v = (textOverrides[f.key] != null ? textOverrides[f.key] : "");
+        var custom = textOverrides[f.key] != null && textOverrides[f.key] !== "";
+        var ph = f.def ? "Default: " + f.def : "—";
+        var control = f.type === "textarea"
+          ? '<textarea data-tkey="' + esc(f.key) + '" rows="3" placeholder="' + esc(ph) + '" class="w-full bg-surface-container/50 rounded-lg border border-outline-variant px-3 py-2 text-[14px] focus:border-secondary outline-none transition-colors resize-y">' + esc(v) + '</textarea>'
+          : '<input data-tkey="' + esc(f.key) + '" type="text" value="' + esc(v) + '" placeholder="' + esc(ph) + '" class="w-full bg-surface-container/50 rounded-lg border border-outline-variant px-3 py-2 text-[14px] focus:border-secondary outline-none transition-colors">';
+        return '<div class="grid grid-cols-1 md:grid-cols-4 gap-3 items-start">' +
+          '<label class="md:pt-2"><span class="text-[13.5px] font-semibold text-on-background">' + esc(f.label) + '</span>' + (custom ? '<span class="ml-2 text-[9px] font-bold text-secondary align-middle">EDITED</span>' : '') + '<span class="block text-[10.5px] text-on-surface-variant/50 font-mono">' + esc(f.key) + '</span></label>' +
+          '<div class="md:col-span-3">' + control + '</div></div>';
+      }).join("");
+      html += '<section class="fade-in"><div class="flex items-center gap-3 mb-4"><h3 class="font-headline-md text-[20px] text-on-background">' + esc(group.page) + '</h3><div class="flex-1 h-px bg-outline-variant"></div></div>' +
+        '<div class="bg-surface rounded-2xl border border-outline-variant p-5 md:p-6 space-y-5">' + rows + '</div></section>';
+    });
+    txtHost.innerHTML = html;
+    document.getElementById("txtEmpty").classList.toggle("hidden", shown > 0);
+  }
+  txtHost.addEventListener("input", function (e) {
+    var el = e.target.closest("[data-tkey]"); if (!el) return;
+    var k = el.getAttribute("data-tkey"), val = el.value;
+    if (val && val.trim() !== "") textOverrides[k] = val; else delete textOverrides[k];
+    markDirty();
+  });
+  txtSearch.addEventListener("input", renderText);
+
+  /* ================= STATS ================= */
+  function updateStats() {
+    document.getElementById("statCustomImg").textContent = countCustom(overrides);
+    document.getElementById("statCustomTxt").textContent = countCustom(textOverrides);
+    document.getElementById("statTotalImg").textContent = Object.keys(imageDefaults).length;
+    document.getElementById("navImgCount").textContent = countCustom(overrides) || "";
+    document.getElementById("navTxtCount").textContent = countCustom(textOverrides) || "";
+  }
+
+  /* ================= GALLERIES (add / delete / reorder, dynamic) ================= */
+  var galleryDefs = window.TLP_GALLERIES || [];
+  var galHost = document.getElementById("galleryGroups");
+  function galCount(id) { return (galleries[id] || []).length; }
+  function galTiles(id) {
+    return (galleries[id] || []).map(function (it, i) {
+      return '<figure class="relative group aspect-square rounded-xl overflow-hidden border border-outline-variant bg-surface-container" draggable="true" data-gal-tile data-idx="' + i + '">' +
+        '<img src="' + esc(it.url) + '" class="w-full h-full object-cover pointer-events-none" alt="">' +
+        '<button type="button" data-gal-del class="absolute top-1.5 right-1.5 w-7 h-7 rounded-full bg-on-background/70 text-background flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity" title="Delete"><span class="material-symbols-outlined text-[18px] pointer-events-none">close</span></button>' +
+      '</figure>';
+    }).join("");
+  }
+  function renderGallery(sec) {
+    var id = sec.getAttribute("data-gal");
+    var grid = sec.querySelector("[data-gal-grid]");
+    grid.innerHTML = galTiles(id) +
+      '<label class="flex flex-col items-center justify-center gap-1.5 aspect-square rounded-xl border-2 border-dashed border-outline-variant text-on-surface-variant hover:border-secondary hover:text-secondary cursor-pointer transition-colors" data-gal-add><span class="material-symbols-outlined text-[26px]">add_photo_alternate</span><span class="text-[11.5px] font-semibold text-center px-1 leading-tight">Add / drop photos</span><input type="file" accept="image/*" multiple class="hidden" data-gal-file></label>';
+    var cnt = sec.querySelector("[data-gal-count]");
+    if (cnt) cnt.textContent = galCount(id) + " photo" + (galCount(id) === 1 ? "" : "s");
+  }
+  function renderGalleries() {
+    if (!galHost) return;
+    galHost.innerHTML = galleryDefs.map(function (g) {
+      return '<section class="fade-in" data-gal="' + esc(g.id) + '">' +
+        '<div class="flex items-center gap-3 mb-4"><h3 class="font-headline-md text-[21px] text-on-background">' + esc(g.label) + '</h3>' +
+        '<span data-gal-count class="text-on-surface-variant/55 text-[12px] font-semibold"></span>' +
+        '<div class="flex-1 h-px bg-outline-variant"></div></div>' +
+        '<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3" data-gal-grid></div>' +
+        '<div class="flex items-center gap-2 mt-3"><input type="url" placeholder="…or paste an image link" data-gal-url class="flex-1 bg-surface-container/50 rounded-lg border border-outline-variant px-3 py-2 text-[13px] focus:border-secondary outline-none transition-colors"><button type="button" data-gal-lib class="btn-pill px-4 py-2 border border-outline-variant text-on-surface text-[12px] font-semibold whitespace-nowrap hover:border-secondary hover:text-secondary transition-colors">Library</button><button type="button" data-gal-url-add class="btn-pill px-4 py-2 bg-secondary text-on-secondary text-[12px] font-semibold whitespace-nowrap hover:bg-secondary-fixed transition-colors">Add link</button></div>' +
+      '</section>';
+    }).join("");
+    galHost.querySelectorAll("[data-gal]").forEach(renderGallery);
+    var nav = document.getElementById("navGalCount");
+    if (nav) { var tot = galleryDefs.reduce(function (n, g) { return n + galCount(g.id); }, 0); nav.textContent = tot || ""; }
+  }
+  function galPush(id, url) { if (!galleries[id]) galleries[id] = []; galleries[id].push({ url: url, alt: "" }); markDirty(); }
+  function galUpload(sec, files) {
+    files = Array.prototype.slice.call(files).filter(function (f) { return /^image\//.test(f.type); });
+    if (!files.length) return;
+    var id = sec.getAttribute("data-gal");
+    toast("Uploading " + files.length + " photo" + (files.length === 1 ? "" : "s") + "…", "work");
+    var done = 0, ok = 0;
+    files.forEach(function (f) {
+      uploadFile(f).then(function (res) { galPush(id, res.url); ok++; }).catch(function () {})
+        .then(function () { done++; if (done === files.length) { renderGallery(sec); toast(ok + " photo" + (ok === 1 ? "" : "s") + " added ✓ — Publish to go live."); } });
+    });
+  }
+  if (galHost) {
+    galHost.addEventListener("change", function (e) {
+      if (!e.target.matches("[data-gal-file]")) return;
+      var sec = e.target.closest("[data-gal]"); galUpload(sec, e.target.files); e.target.value = "";
+    });
+    galHost.addEventListener("click", function (e) {
+      var glib = e.target.closest("[data-gal-lib]");
+      if (glib) { var gls = glib.closest("[data-gal]"); var glid = gls.getAttribute("data-gal"); openLib(function (url) { galPush(glid, url); renderGallery(gls); toast("Added from library."); }); return; }
+      var del = e.target.closest("[data-gal-del]");
+      if (del) { var tile = del.closest("[data-gal-tile]"); var sec = del.closest("[data-gal]"); (galleries[sec.getAttribute("data-gal")] || []).splice(parseInt(tile.getAttribute("data-idx"), 10), 1); markDirty(); renderGallery(sec); return; }
+      var add = e.target.closest("[data-gal-url-add]");
+      if (add) { var s2 = add.closest("[data-gal]"); var inp = s2.querySelector("[data-gal-url]"); var v = (inp.value || "").trim(); if (!v) { toast("Paste an image link first.", "error"); return; } galPush(s2.getAttribute("data-gal"), v); inp.value = ""; renderGallery(s2); toast("Image added ✓"); }
+    });
+    var galDrag = null;
+    galHost.addEventListener("dragstart", function (e) { var t = e.target.closest("[data-gal-tile]"); if (!t) return; galDrag = { id: t.closest("[data-gal]").getAttribute("data-gal"), idx: parseInt(t.getAttribute("data-idx"), 10) }; if (e.dataTransfer) e.dataTransfer.effectAllowed = "move"; });
+    galHost.addEventListener("dragover", function (e) { if (e.target.closest("[data-gal]")) e.preventDefault(); });
+    galHost.addEventListener("drop", function (e) {
+      var sec = e.target.closest("[data-gal]"); if (!sec) return;
+      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) { e.preventDefault(); galUpload(sec, e.dataTransfer.files); galDrag = null; return; }
+      var t = e.target.closest("[data-gal-tile]"); if (!t || !galDrag) return;
+      if (sec.getAttribute("data-gal") !== galDrag.id) { galDrag = null; return; }
+      e.preventDefault();
+      var arr = galleries[galDrag.id] || []; var moved = arr.splice(galDrag.idx, 1)[0]; arr.splice(parseInt(t.getAttribute("data-idx"), 10), 0, moved); galDrag = null; markDirty(); renderGallery(sec);
+    });
+  }
+
+  /* ================= SAVE / PUBLISH / EXPORT / IMPORT ================= */
+  document.getElementById("saveBtn").addEventListener("click", function () {
+    try {
+      localStorage.setItem(IMG_KEY, JSON.stringify(overrides));
+      localStorage.setItem(TXT_KEY, JSON.stringify(textOverrides));
+      localStorage.setItem(GAL_KEY, JSON.stringify(galleries));
+      dirty = false; unpublished = true; setStatus();
+      document.getElementById("storeWarn").classList.add("hidden");
+      toast("Saved to preview. Open your site in this browser to check it.");
+    } catch (err) {
+      var w = document.getElementById("storeWarn");
+      w.textContent = "Couldn't save — browser storage is full. Upload photos (they're hosted, not stored here) instead of pasting raw image data.";
+      w.classList.remove("hidden");
+      toast("Storage full — see note on Overview.", "error");
+    }
+  });
+
+  document.getElementById("publishBtn").addEventListener("click", function () {
+    try { localStorage.setItem(IMG_KEY, JSON.stringify(overrides)); localStorage.setItem(TXT_KEY, JSON.stringify(textOverrides)); localStorage.setItem(GAL_KEY, JSON.stringify(galleries)); } catch (e) {}
+    // Warn if any raw image data slipped into the payload (would bloat publish).
+    var dataStr = JSON.stringify({ images: overrides, text: textOverrides, galleries: galleries });
+    var hasRaw = Object.keys(overrides).some(function (k) { return String(overrides[k]).indexOf("data:") === 0; });
+    if (hasRaw) {
+      toast("Some photos are still local previews. On your live site, re-upload them so they're hosted, then Publish.", "error");
+    }
+    var btn = document.getElementById("publishBtn"), label = btn.innerHTML;
+    btn.disabled = true; btn.innerHTML = '<span class="material-symbols-outlined text-[18px] spin">progress_activity</span>Publishing…';
+    fetch("/.netlify/functions/publish", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key: adminKey(), images: overrides, text: textOverrides, galleries: galleries })
+    }).then(function (r) {
+      btn.disabled = false; btn.innerHTML = label;
+      if (!r.ok) return r.json().then(function (j) { throw new Error((j && j.message) || "publish failed"); });
+      try { localStorage.setItem(PUBCACHE, dataStr); } catch (e) {}
+      dirty = false; unpublished = false; setStatus();
+      toast("Published live — now visible on every device.");
+    }).catch(function (err) {
+      btn.disabled = false; btn.innerHTML = label;
+      // Keep the work safe locally either way.
+      try { localStorage.setItem(IMG_KEY, JSON.stringify(overrides)); localStorage.setItem(TXT_KEY, JSON.stringify(textOverrides)); localStorage.setItem(GAL_KEY, JSON.stringify(galleries)); } catch (e) {}
+      dirty = false; unpublished = true; setStatus();
+      var host = location.hostname;
+      var local = !host || host === "localhost" || host === "127.0.0.1" || location.protocol === "file:";
+      if (local) {
+        // Not a real error — there's just no server when previewing locally.
+        toast("Saved as preview. To publish to every device, open this admin at your live site address (…netlify.app/admin.html).");
+      } else {
+        toast("Couldn't publish just now — your changes are saved. Please try Publish again in a moment.", "error");
+      }
+    });
+  });
+
+  document.getElementById("exportBtn").addEventListener("click", function () {
+    var blob = new Blob([JSON.stringify({ images: overrides, text: textOverrides }, null, 2)], { type: "application/json" });
+    var url = URL.createObjectURL(blob); var a = document.createElement("a"); a.href = url; a.download = "tlp-site-settings.json";
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    toast("Exported tlp-site-settings.json");
+  });
+  document.getElementById("importInput").addEventListener("change", function (e) {
+    var file = e.target.files && e.target.files[0]; if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      try {
+        var data = JSON.parse(reader.result);
+        if (data && data.images) overrides = data.images;
+        if (data && data.text) textOverrides = data.text;
+        if (data && data.galleries) galleries = data.galleries;
+        if (!data.images && !data.text && typeof data === "object") overrides = data;
+        renderImages(); renderText(); renderGalleries(); markDirty();
+        toast("Imported. Review, then Save or Publish.");
+      } catch (err) { toast("That file isn't a valid settings export.", "error"); }
+    };
+    reader.readAsText(file);
+  });
+
+  /* logout */
+  function doLogout() { if (window.TLP_AUTH) TLP_AUTH.logout(); }
+  var lo = document.getElementById("logoutBtn"); if (lo) lo.addEventListener("click", doLogout);
+  var loM = document.getElementById("logoutBtnM"); if (loM) loM.addEventListener("click", doLogout);
+
+  /* storage availability */
+  try { localStorage.setItem("__t", "1"); localStorage.removeItem("__t"); }
+  catch (e) {
+    var w = document.getElementById("storeWarn");
+    w.textContent = "Your browser is blocking local storage. Run the site from your live URL (or http://localhost) so changes can be saved.";
+    w.classList.remove("hidden");
+  }
+
+  /* ================= ENQUIRIES ================= */
+  var enqList = document.getElementById("enquiriesList"), enqCount = document.getElementById("enqCount");
+  var enqData = [], enqLoaded = false, enqForm = "all";
+  function fmtDate(d) { try { return new Date(d).toLocaleString(); } catch (e) { return d || ""; } }
+  function enqInfo(title, extra) {
+    enqList.innerHTML = '<div class="bg-surface border border-outline-variant rounded-2xl p-6 text-sm text-on-surface-variant"><p class="font-semibold text-on-background mb-1 flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-[20px]">info</span>' + esc(title) + '</p>' + (extra || "") + '</div>';
+    enqCount.textContent = "";
+  }
+  function enqRender() {
+    var q = (document.getElementById("enqSearch").value || "").trim().toLowerCase();
+    var rows = enqData.filter(function (s) {
+      if (enqForm !== "all" && s.form !== enqForm) return false;
+      if (!q) return true;
+      return ((s.name || "") + " " + (s.email || "") + " " + (s.message || "") + " " + (s.service || "")).toLowerCase().indexOf(q) !== -1;
+    });
+    document.getElementById("statEnq").textContent = enqData.length;
+    if (!enqData.length) { enqList.innerHTML = '<div class="bg-surface border border-outline-variant rounded-2xl p-10 text-center text-on-surface-variant"><span class="material-symbols-outlined text-[32px] text-on-surface-variant/40 mb-2">inbox</span><p>No enquiries yet.</p></div>'; enqCount.textContent = ""; return; }
+    enqCount.textContent = rows.length + " of " + enqData.length + " enquir" + (enqData.length === 1 ? "y" : "ies");
+    if (!rows.length) { enqList.innerHTML = '<p class="text-on-surface-variant text-sm py-8 text-center">No enquiries match your filter.</p>'; return; }
+    enqList.innerHTML = rows.map(function (s) {
+      var label = s.form === "balloon-tales-booking" ? "TBT Events" : "Lens Perspective";
+      return '<div class="bg-surface border border-outline-variant rounded-2xl p-5 fade-in">' +
+        '<div class="flex flex-wrap items-start justify-between gap-3 mb-3">' +
+          '<div><p class="font-semibold text-on-background text-[15px]">' + esc(s.name || "(no name)") + '</p>' +
+          '<p class="text-on-surface-variant text-[13px]">' + esc(s.email) + (s.phone ? ' · ' + esc(s.phone) : '') + '</p></div>' +
+          '<div class="text-right"><span class="text-[10px] font-bold uppercase tracking-wide bg-secondary/12 text-secondary rounded-full px-2.5 py-1">' + esc(label) + '</span>' +
+          '<p class="text-on-surface-variant/55 text-[11.5px] mt-1.5">' + esc(fmtDate(s.date)) + '</p></div>' +
+        '</div>' +
+        '<div class="text-[13.5px] text-on-surface-variant space-y-1">' +
+          (s.service ? '<p><span class="text-on-background font-medium">Service:</span> ' + esc(s.service) + '</p>' : '') +
+          (s.eventDate ? '<p><span class="text-on-background font-medium">Date:</span> ' + esc(s.eventDate) + '</p>' : '') +
+          (s.message ? '<p class="mt-2 leading-relaxed">' + esc(s.message) + '</p>' : '') +
+        '</div>' +
+        '<div class="mt-4 pt-3 border-t border-outline-variant flex gap-4">' +
+          '<a href="mailto:' + esc(s.email) + '" class="text-secondary text-[12.5px] font-semibold hover:underline flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">reply</span>Reply</a>' +
+          '<button data-del="' + esc(s.id) + '" class="text-error text-[12.5px] font-semibold hover:underline flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">delete</span>Delete</button>' +
+        '</div></div>';
+    }).join("");
+  }
+  function enqLoad() {
+    enqList.innerHTML = '<p class="text-on-surface-variant text-sm">Loading enquiries…</p>';
+    fetch("/.netlify/functions/enquiries", { headers: { "x-admin-key": adminKey() } })
+      .then(function (r) { return r.json().then(function (b) { return { ok: r.ok, status: r.status, body: b }; }); })
+      .then(function (res) {
+        if (!res.ok) {
+          var m = (res.body && res.body.message) || "Could not load enquiries.";
+          var extra = "";
+          if (res.body && res.body.error === "not_configured") extra = '<p class="mt-2">Add <code class="font-mono text-secondary">NETLIFY_API_TOKEN</code> and <code class="font-mono text-secondary">ADMIN_KEY</code> in Netlify → Environment variables, then redeploy and Refresh.</p>';
+          else if (res.status === 401) extra = '<p class="mt-2">Log out and back in, or make sure <code class="font-mono text-secondary">ADMIN_KEY</code> matches your login password.</p>';
+          enqInfo(m, extra); return;
+        }
+        enqData = Array.isArray(res.body) ? res.body : [];
+        enqData.sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
+        enqRender();
+      })
+      .catch(function () {
+        enqInfo("Enquiries load on the live site only.", '<p class="mt-2">This panel uses a serverless function that isn\'t available in local preview. Open the admin at your live Netlify URL.</p>');
+      });
+  }
+  function enqEnsure() { if (!enqLoaded) { enqLoaded = true; enqLoad(); } }
+  document.getElementById("enqRefresh").addEventListener("click", enqLoad);
+  document.getElementById("enqSearch").addEventListener("input", enqRender);
+  document.getElementById("enqFormFilter").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-form]"); if (!b) return;
+    enqForm = b.getAttribute("data-form");
+    document.querySelectorAll("#enqFormFilter [data-form]").forEach(function (x) {
+      var on = x === b;
+      x.classList.toggle("bg-surface", on); x.classList.toggle("shadow-sm", on); x.classList.toggle("text-on-background", on); x.classList.toggle("text-on-surface-variant", !on);
+    });
+    enqRender();
+  });
+  enqList.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-del]"); if (!b) return;
+    var id = b.getAttribute("data-del");
+    if (!confirm("Delete this enquiry permanently?")) return;
+    fetch("/.netlify/functions/enquiries?id=" + encodeURIComponent(id), { method: "DELETE", headers: { "x-admin-key": adminKey() } })
+      .then(function (r) { if (r.ok) { enqData = enqData.filter(function (x) { return x.id !== id; }); enqRender(); toast("Enquiry deleted."); } else toast("Delete failed.", "error"); });
+  });
+  document.getElementById("enqExport").addEventListener("click", function () {
+    if (!enqData.length) { toast("No enquiries to export."); return; }
+    var cols = ["date", "form", "name", "email", "phone", "service", "eventDate", "message"];
+    var rows = [cols.join(",")].concat(enqData.map(function (s) { return cols.map(function (c) { return '"' + String(s[c] == null ? "" : s[c]).replace(/"/g, '""') + '"'; }).join(","); }));
+    var blob = new Blob([rows.join("\n")], { type: "text/csv" });
+    var url = URL.createObjectURL(blob); var a = document.createElement("a"); a.href = url; a.download = "enquiries.csv";
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    toast("Exported enquiries.csv");
+  });
+
+  /* ================= MEDIA LIBRARY (assets files + uploaded) ================= */
+  var assetLib = window.TLP_ASSET_LIBRARY || [];
+  var libModal = null, libGrid = null, libOnPick = null, libUploaded = [];
+  function buildLib() {
+    libModal = document.createElement("div");
+    libModal.className = "fixed inset-0 z-[70] hidden items-center justify-center bg-on-background/55 p-4";
+    libModal.innerHTML =
+      '<div class="bg-surface rounded-2xl border border-outline-variant w-full max-w-3xl max-h-[82vh] flex flex-col overflow-hidden fade-in">' +
+        '<div class="flex items-center justify-between px-5 py-4 border-b border-outline-variant">' +
+          '<div><h3 class="font-headline-md text-[18px] text-on-background">Media library</h3><p class="text-on-surface-variant text-[12px]">Pick an image — or upload a new one.</p></div>' +
+          '<button data-lib-close type="button" class="p-2 text-on-surface-variant hover:text-on-background rounded-lg"><span class="material-symbols-outlined">close</span></button>' +
+        '</div>' +
+        '<div class="px-5 py-3 border-b border-outline-variant flex items-center gap-3">' +
+          '<label class="flex items-center gap-2 px-4 py-2 rounded-full bg-secondary text-on-secondary text-[12.5px] font-semibold cursor-pointer hover:bg-secondary-fixed transition-colors"><span class="material-symbols-outlined text-[18px]">upload</span>Upload new<input data-lib-upload type="file" accept="image/*" class="hidden"></label>' +
+          '<span data-lib-status class="text-on-surface-variant text-[12.5px]"></span>' +
+        '</div>' +
+        '<div data-lib-grid class="p-5 grid grid-cols-3 sm:grid-cols-4 gap-3 overflow-y-auto"></div>' +
+      '</div>';
+    document.body.appendChild(libModal);
+    libGrid = libModal.querySelector("[data-lib-grid]");
+    libModal.addEventListener("click", function (e) { if (e.target === libModal || e.target.closest("[data-lib-close]")) closeLib(); });
+    libGrid.addEventListener("click", function (e) {
+      var b = e.target.closest("[data-lib-pick]"); if (!b || !libOnPick) return;
+      var fn = libOnPick, url = b.getAttribute("data-lib-pick"); closeLib(); fn(url);
+    });
+    libModal.querySelector("[data-lib-upload]").addEventListener("change", function (e) {
+      var f = e.target.files && e.target.files[0]; e.target.value = ""; if (!f) return;
+      var st = libModal.querySelector("[data-lib-status]"); st.textContent = "Uploading…";
+      uploadFile(f).then(function (res) { st.textContent = ""; if (res.url) { libUploaded.unshift({ url: res.url }); renderLib(); } })
+        .catch(function () { st.textContent = "Upload failed."; });
+    });
+  }
+  function openLib(onPick) {
+    if (!libModal) buildLib();
+    libOnPick = onPick;
+    libModal.classList.remove("hidden"); libModal.classList.add("flex");
+    renderLib();
+    fetch("/.netlify/functions/media?list=1").then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { libUploaded = (j && j.items) || []; renderLib(); }).catch(function () {});
+  }
+  function closeLib() { if (libModal) { libModal.classList.add("hidden"); libModal.classList.remove("flex"); } libOnPick = null; }
+  function renderLib() {
+    if (!libGrid) return;
+    var items = assetLib.map(function (p) { return { url: p, kind: "asset" }; })
+      .concat((libUploaded || []).map(function (u) { return { url: u.url, kind: "upload" }; }));
+    if (!items.length) { libGrid.innerHTML = '<p class="col-span-full text-center text-on-surface-variant py-10 text-[13px]">No images yet. Click “Upload new”, or add files to <span class="font-mono">assets/img</span>.</p>'; return; }
+    libGrid.innerHTML = items.map(function (it) {
+      return '<button type="button" data-lib-pick="' + esc(it.url) + '" class="relative aspect-square rounded-lg overflow-hidden border border-outline-variant hover:border-secondary hover:ring-2 hover:ring-secondary/30 transition-all"><img src="' + esc(it.url) + '" class="w-full h-full object-cover" alt="" loading="lazy"><span class="absolute top-1 left-1 text-[8.5px] font-bold px-1.5 py-0.5 rounded-full ' + (it.kind === "asset" ? "bg-tertiary text-white" : "bg-secondary text-white") + '">' + (it.kind === "asset" ? "FILE" : "UPLOAD") + '</span></button>';
+    }).join("");
+  }
+
+  /* ================= INIT ================= */
+  renderImages(); renderText(); renderGalleries(); updateStats(); setStatus();
+})();
+</script>
+</body>
+</html>

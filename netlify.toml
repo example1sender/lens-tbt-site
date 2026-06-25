@@ -1,0 +1,28 @@
+# Netlify configuration for The Lense Perspective (static site)
+# Drag-and-drop deploy works with zero config; this just adds nice headers.
+
+[build]
+  publish = "."
+
+[functions]
+  directory = "netlify/functions"
+  # esbuild bundles the @netlify/blobs dependency used by media/publish/settings.
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Keep the admin/login pages out of search engines.
+[[headers]]
+  for = "/admin.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/login.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

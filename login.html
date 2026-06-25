@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" type="image/png" href="assets/img/favicon.png">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta name="robots" content="noindex,nofollow">
+<title>Admin Login | The Lens Perspective Photography &amp; TBT Events</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="assets/js/tailwind.config.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+<script src="assets/js/auth.js"></script>
+<script>/* already signed in? skip the form */ if (window.TLP_AUTH && TLP_AUTH.isAuthed()) location.replace("admin.html");</script>
+<style>
+  body { cursor: auto; }
+  .dotfield { background-image: radial-gradient(circle, rgba(243,221,230,.45) 1.3px, transparent 1.5px); background-size: 40px 40px; }
+</style>
+</head>
+<body class="font-body-md text-body-md text-on-background min-h-screen">
+
+<div class="min-h-screen grid lg:grid-cols-2">
+
+  <!-- Brand panel (desktop) -->
+  <div class="relative hidden lg:flex flex-col justify-between bg-primary text-on-primary overflow-hidden p-12 xl:p-16">
+    <div class="dotfield absolute inset-0 opacity-40" aria-hidden="true"></div>
+    <div class="relative z-10">
+      <a href="index.html" class="font-headline-lg text-3xl text-white leading-tight hover:text-secondary-container transition-colors">The Lens Perspective<br>Photography</a>
+      <p class="text-[12px] font-semibold tracking-[0.28em] uppercase text-secondary-container mt-4">&amp; TBT Events by Abeer K</p>
+    </div>
+    <div class="relative z-10 max-w-sm">
+      <span class="material-symbols-outlined text-secondary-container text-[34px] mb-5">photo_library</span>
+      <p class="font-headline-md text-2xl text-white leading-snug mb-3">Your studio control room.</p>
+      <p class="text-on-primary/65 leading-relaxed text-[15px]">Swap photos, edit wording and manage enquiries — then publish to every device in one click.</p>
+    </div>
+    <p class="relative z-10 text-on-primary/40 text-xs tracking-[0.18em] uppercase">Authorised personnel only</p>
+  </div>
+
+  <!-- Form panel -->
+  <div class="flex items-center justify-center px-margin-mobile py-16 bg-background">
+    <main class="w-full max-w-sm">
+      <div class="lg:hidden text-center mb-10">
+        <a href="index.html" class="font-headline-lg text-2xl text-on-background hover:text-secondary transition-colors">The Lens Perspective</a>
+      </div>
+
+      <p class="font-label-caps text-label-caps text-secondary mb-3">Admin access</p>
+      <h1 class="font-headline-lg text-4xl text-on-background leading-none mb-2">Welcome back</h1>
+      <p class="text-on-surface-variant mb-9">Sign in to manage your site.</p>
+
+      <form id="loginForm" novalidate class="space-y-5">
+        <div>
+          <label for="user" class="block text-[12px] font-semibold tracking-[0.16em] uppercase text-on-surface-variant mb-2">Username</label>
+          <input id="user" name="user" type="text" autocomplete="username" value="admin" class="w-full bg-surface rounded-xl border border-outline-variant px-4 py-3.5 focus:border-secondary outline-none transition-colors text-on-surface">
+        </div>
+        <div>
+          <label for="pass" class="block text-[12px] font-semibold tracking-[0.16em] uppercase text-on-surface-variant mb-2">Password</label>
+          <div class="relative">
+            <input id="pass" name="pass" type="password" autocomplete="current-password" class="w-full bg-surface rounded-xl border border-outline-variant px-4 py-3.5 pr-12 focus:border-secondary outline-none transition-colors text-on-surface" placeholder="Enter password">
+            <button type="button" id="togglePass" aria-label="Show password" class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-secondary"><span class="material-symbols-outlined" id="eyeIcon">visibility</span></button>
+          </div>
+        </div>
+        <p id="loginError" role="alert" aria-live="polite" class="field-error"></p>
+        <button type="submit" id="loginBtn" class="w-full btn-pill px-8 py-4 bg-secondary text-on-secondary font-semibold text-[13px] tracking-[0.12em] uppercase hover:bg-secondary-fixed transition-colors active:scale-[0.99]">Sign In</button>
+      </form>
+
+      <p class="text-on-surface-variant/70 text-[13px] mt-8">Authorised personnel only. <a href="index.html" class="text-secondary gold-underline-hover font-medium">Back to site</a></p>
+    </main>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var form = document.getElementById("loginForm");
+  var err = document.getElementById("loginError");
+  var btn = document.getElementById("loginBtn");
+
+  document.getElementById("togglePass").addEventListener("click", function () {
+    var p = document.getElementById("pass");
+    var icon = document.getElementById("eyeIcon");
+    var show = p.type === "password";
+    p.type = show ? "text" : "password";
+    icon.textContent = show ? "visibility_off" : "visibility";
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    err.textContent = "";
+    var user = document.getElementById("user").value.trim();
+    var pass = document.getElementById("pass").value;
+    if (!user || !pass) { err.textContent = "Enter your username and password."; return; }
+    btn.disabled = true; btn.textContent = "Checking…";
+    TLP_AUTH.login(user, pass).then(function (ok) {
+      if (ok) { location.replace("admin.html"); return; }
+      btn.disabled = false; btn.textContent = "Sign In";
+      err.textContent = "Incorrect username or password.";
+      document.getElementById("pass").value = "";
+    }).catch(function () {
+      btn.disabled = false; btn.textContent = "Sign In";
+      err.textContent = "Login needs a secure context — open via http://localhost or your https site, not a file:// path.";
+    });
+  });
+})();
+</script>
+</body>
+</html>

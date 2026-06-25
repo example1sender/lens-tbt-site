@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" type="image/png" href="assets/img/favicon.png">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta name="description" content="The visual archive of The Lens Perspective Photography — a curated gallery of weddings, events, products and portraits.">
+<title>Portfolio &amp; Gallery | The Lens Perspective Photography</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="assets/js/tailwind.config.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body class="font-body-md text-body-md" data-page="portfolio">
+<header id="site-nav"></header>
+
+<main id="main" class="pt-32 md:pt-40">
+  <!-- HERO -->
+  <section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto mb-12 md:mb-16">
+    <div class="max-w-3xl reveal-up">
+      <span class="text-[12px] font-semibold tracking-[0.22em] uppercase text-secondary block mb-6" data-text="portfolio.hero_eyebrow">Curated works</span>
+      <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-background leading-[1.02] mb-8" data-text="portfolio.hero_title">The Visual Archive</h1>
+      <p class="text-body-lg text-on-surface-variant" data-text="portfolio.hero_text">A selection of moments and milestones, framed with intention.</p>
+    </div>
+  </section>
+
+  <!-- DYNAMIC GALLERY — managed in admin (add / delete images), rendered live -->
+  <section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto pb-24 md:pb-section-gap">
+    <div class="columns-1 sm:columns-2 lg:columns-3 gap-gutter [column-fill:_balance] reveal-up active"
+         data-gallery="portfolio" data-gallery-item="break-inside-avoid mb-gutter"
+         data-empty="No photos here yet — add images from the Galleries panel in the admin, then Publish."></div>
+  </section>
+
+  <!-- CTA -->
+  <section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto pb-24 md:pb-section-gap text-center">
+    <h2 class="font-display-lg-mobile md:font-headline-lg text-display-lg-mobile md:text-headline-lg text-on-background mb-8 reveal-up" data-text="portfolio.cta_title">Your story belongs in this archive.</h2>
+    <a href="contact.html" class="inline-block btn-pill px-10 py-4 bg-secondary text-on-secondary text-[12px] font-semibold tracking-wide uppercase hover:bg-secondary-fixed transition-all duration-300 active:scale-95 reveal-up">Book a Session</a>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+<script src="assets/js/components.js"></script>
+<script src="assets/js/content.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
