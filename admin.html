@@ -373,22 +373,43 @@
     });
   }
 
-  // Upload: try server (Netlify Blobs) → returns hosted URL.
-  // Fallback (local preview / offline): a compact data URL stored locally so the preview still works.
+  function readDataUrl(file) {
+    return new Promise(function (res, rej) { var fr = new FileReader(); fr.onload = function () { res(fr.result); }; fr.onerror = function () { rej(new Error("Could not read that file.")); }; fr.readAsDataURL(file); });
+  }
+
+  // Upload: images are compressed; videos are sent as-is (small clips only).
+  // Returns a hosted URL from the server (Netlify Blobs).
   function uploadFile(file) {
-    if (!/^image\//.test(file.type)) return Promise.reject(new Error("That's not an image file."));
-    return compress(file, 4000, 0.92).then(function (dataUrl) {
+    var isImg = /^image\//.test(file.type), isVid = /^video\//.test(file.type);
+    if (!isImg && !isVid) return Promise.reject(new Error("Please choose an image or video file."));
+    var prep = isImg ? compress(file, 4000, 0.92) : readDataUrl(file);
+    return prep.then(function (dataUrl) {
+      // Serverless upload limit is ~6 MB; guard videos so they fail clearly, not silently.
+      if (isVid && dataUrl.length > 5.4 * 1024 * 1024) {
+        return Promise.reject(new Error("Video too big to upload (max ~4 MB). Paste a YouTube/Vimeo or .mp4 link instead."));
+      }
       return fetch("/.netlify/functions/media", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-admin-key": adminKey() },
         body: JSON.stringify({ dataUrl: dataUrl, name: file.name })
       }).then(function (r) { return r.ok ? r.json() : Promise.reject(new Error("server")); })
         .then(function (j) { if (j && j.url) return { url: j.url, hosted: true }; throw new Error("server"); })
-        .catch(function () {
-          // No server here — keep a smaller data URL locally for preview.
+        .catch(function (err) {
+          if (isVid) throw (err && err.message ? err : new Error("Video upload failed — try a link instead."));
+          // images: keep a smaller data URL locally for preview when offline
           return compress(file, 1400, 0.72).then(function (small) { return { url: small, hosted: false }; });
         });
     });
+  }
+
+  /* ---------------- video helpers (for admin previews) ---------------- */
+  function admIsVideo(u) { u = String(u || ""); return /youtube\.com|youtu\.be|vimeo\.com/.test(u) || /\.(mp4|webm|ogg|mov)(\?|#|$)/i.test(u) || /[?&]id=[^&]*\.(mp4|webm|ogg|mov)/i.test(u); }
+  function admThumb(url, cls) {
+    if (admIsVideo(url)) {
+      if (/youtube|youtu\.be|vimeo/.test(url)) return '<div class="' + cls + ' flex items-center justify-center bg-on-background text-background"><span class="material-symbols-outlined text-[26px]">smart_display</span></div>';
+      return '<video class="' + cls + '" src="' + esc(url) + '" muted preload="metadata" playsinline></video>';
+    }
+    return '<img src="' + esc(url) + '" class="' + cls + '" alt="">';
   }
 
   /* ================= IMAGES UI ================= */
@@ -652,7 +673,7 @@
   function galTiles(id) {
     return (galleries[id] || []).map(function (it, i) {
       return '<figure class="relative group aspect-square rounded-xl overflow-hidden border border-outline-variant bg-surface-container" draggable="true" data-gal-tile data-idx="' + i + '">' +
-        '<img src="' + esc(it.url) + '" class="w-full h-full object-cover pointer-events-none" alt="">' +
+        admThumb(it.url, "w-full h-full object-cover pointer-events-none") +
         '<button type="button" data-gal-del class="absolute top-1.5 right-1.5 w-7 h-7 rounded-full bg-on-background/70 text-background flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity" title="Delete"><span class="material-symbols-outlined text-[18px] pointer-events-none">close</span></button>' +
       '</figure>';
     }).join("");
@@ -661,7 +682,7 @@
     var id = sec.getAttribute("data-gal");
     var grid = sec.querySelector("[data-gal-grid]");
     grid.innerHTML = galTiles(id) +
-      '<label class="flex flex-col items-center justify-center gap-1.5 aspect-square rounded-xl border-2 border-dashed border-outline-variant text-on-surface-variant hover:border-secondary hover:text-secondary cursor-pointer transition-colors" data-gal-add><span class="material-symbols-outlined text-[26px]">add_photo_alternate</span><span class="text-[11.5px] font-semibold text-center px-1 leading-tight">Add / drop photos</span><input type="file" accept="image/*" multiple class="hidden" data-gal-file></label>';
+      '<label class="flex flex-col items-center justify-center gap-1.5 aspect-square rounded-xl border-2 border-dashed border-outline-variant text-on-surface-variant hover:border-secondary hover:text-secondary cursor-pointer transition-colors" data-gal-add><span class="material-symbols-outlined text-[26px]">add_photo_alternate</span><span class="text-[11.5px] font-semibold text-center px-1 leading-tight">Add / drop photos or videos</span><input type="file" accept="image/*,video/*" multiple class="hidden" data-gal-file></label>';
     var cnt = sec.querySelector("[data-gal-count]");
     if (cnt) cnt.textContent = galCount(id) + " photo" + (galCount(id) === 1 ? "" : "s");
   }
@@ -673,7 +694,7 @@
         '<span data-gal-count class="text-on-surface-variant/55 text-[12px] font-semibold"></span>' +
         '<div class="flex-1 h-px bg-outline-variant"></div></div>' +
         '<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3" data-gal-grid></div>' +
-        '<div class="flex items-center gap-2 mt-3"><input type="url" placeholder="…or paste an image link" data-gal-url class="flex-1 bg-surface-container/50 rounded-lg border border-outline-variant px-3 py-2 text-[13px] focus:border-secondary outline-none transition-colors"><button type="button" data-gal-lib class="btn-pill px-4 py-2 border border-outline-variant text-on-surface text-[12px] font-semibold whitespace-nowrap hover:border-secondary hover:text-secondary transition-colors">Library</button><button type="button" data-gal-url-add class="btn-pill px-4 py-2 bg-secondary text-on-secondary text-[12px] font-semibold whitespace-nowrap hover:bg-secondary-fixed transition-colors">Add link</button></div>' +
+        '<div class="flex items-center gap-2 mt-3"><input type="url" placeholder="…or paste an image / video link (YouTube, Vimeo, .mp4)" data-gal-url class="flex-1 bg-surface-container/50 rounded-lg border border-outline-variant px-3 py-2 text-[13px] focus:border-secondary outline-none transition-colors"><button type="button" data-gal-lib class="btn-pill px-4 py-2 border border-outline-variant text-on-surface text-[12px] font-semibold whitespace-nowrap hover:border-secondary hover:text-secondary transition-colors">Library</button><button type="button" data-gal-url-add class="btn-pill px-4 py-2 bg-secondary text-on-secondary text-[12px] font-semibold whitespace-nowrap hover:bg-secondary-fixed transition-colors">Add link</button></div>' +
       '</section>';
     }).join("");
     galHost.querySelectorAll("[data-gal]").forEach(renderGallery);
@@ -682,14 +703,14 @@
   }
   function galPush(id, url) { if (!galleries[id]) galleries[id] = []; galleries[id].push({ url: url, alt: "" }); markDirty(); }
   function galUpload(sec, files) {
-    files = Array.prototype.slice.call(files).filter(function (f) { return /^image\//.test(f.type); });
+    files = Array.prototype.slice.call(files).filter(function (f) { return /^(image|video)\//.test(f.type); });
     if (!files.length) return;
     var id = sec.getAttribute("data-gal");
-    toast("Uploading " + files.length + " photo" + (files.length === 1 ? "" : "s") + "…", "work");
-    var done = 0, ok = 0;
+    toast("Uploading " + files.length + " item" + (files.length === 1 ? "" : "s") + "…", "work");
+    var done = 0, ok = 0, lastErr = "";
     files.forEach(function (f) {
-      uploadFile(f).then(function (res) { galPush(id, res.url); ok++; }).catch(function () {})
-        .then(function () { done++; if (done === files.length) { renderGallery(sec); toast(ok + " photo" + (ok === 1 ? "" : "s") + " added ✓ — Publish to go live."); } });
+      uploadFile(f).then(function (res) { galPush(id, res.url); ok++; }).catch(function (e) { lastErr = (e && e.message) || "Upload failed."; })
+        .then(function () { done++; if (done === files.length) { renderGallery(sec); if (ok) toast(ok + " item" + (ok === 1 ? "" : "s") + " added ✓ — Publish to go live."); if (ok < files.length) toast(lastErr, "error"); } });
     });
   }
   if (galHost) {
@@ -907,7 +928,7 @@
           '<button data-lib-close type="button" class="p-2 text-on-surface-variant hover:text-on-background rounded-lg"><span class="material-symbols-outlined">close</span></button>' +
         '</div>' +
         '<div class="px-5 py-3 border-b border-outline-variant flex items-center gap-3">' +
-          '<label class="flex items-center gap-2 px-4 py-2 rounded-full bg-secondary text-on-secondary text-[12.5px] font-semibold cursor-pointer hover:bg-secondary-fixed transition-colors"><span class="material-symbols-outlined text-[18px]">upload</span>Upload new<input data-lib-upload type="file" accept="image/*" class="hidden"></label>' +
+          '<label class="flex items-center gap-2 px-4 py-2 rounded-full bg-secondary text-on-secondary text-[12.5px] font-semibold cursor-pointer hover:bg-secondary-fixed transition-colors"><span class="material-symbols-outlined text-[18px]">upload</span>Upload new<input data-lib-upload type="file" accept="image/*,video/*" class="hidden"></label>' +
           '<span data-lib-status class="text-on-surface-variant text-[12.5px]"></span>' +
         '</div>' +
         '<div data-lib-grid class="p-5 grid grid-cols-3 sm:grid-cols-4 gap-3 overflow-y-auto"></div>' +
@@ -941,7 +962,10 @@
       .concat((libUploaded || []).map(function (u) { return { url: u.url, kind: "upload" }; }));
     if (!items.length) { libGrid.innerHTML = '<p class="col-span-full text-center text-on-surface-variant py-10 text-[13px]">No images yet. Click “Upload new”, or add files to <span class="font-mono">assets/img</span>.</p>'; return; }
     libGrid.innerHTML = items.map(function (it) {
-      return '<button type="button" data-lib-pick="' + esc(it.url) + '" class="relative aspect-square rounded-lg overflow-hidden border border-outline-variant hover:border-secondary hover:ring-2 hover:ring-secondary/30 transition-all"><img src="' + esc(it.url) + '" class="w-full h-full object-cover" alt="" loading="lazy"><span class="absolute top-1 left-1 text-[8.5px] font-bold px-1.5 py-0.5 rounded-full ' + (it.kind === "asset" ? "bg-tertiary text-white" : "bg-secondary text-white") + '">' + (it.kind === "asset" ? "FILE" : "UPLOAD") + '</span></button>';
+      var vid = admIsVideo(it.url);
+      var badge = vid ? "VIDEO" : (it.kind === "asset" ? "FILE" : "UPLOAD");
+      var badgeCls = vid ? "bg-on-background text-white" : (it.kind === "asset" ? "bg-tertiary text-white" : "bg-secondary text-white");
+      return '<button type="button" data-lib-pick="' + esc(it.url) + '" class="relative aspect-square rounded-lg overflow-hidden border border-outline-variant hover:border-secondary hover:ring-2 hover:ring-secondary/30 transition-all">' + admThumb(it.url, "w-full h-full object-cover") + '<span class="absolute top-1 left-1 text-[8.5px] font-bold px-1.5 py-0.5 rounded-full ' + badgeCls + '">' + badge + '</span></button>';
     }).join("");
   }
 
