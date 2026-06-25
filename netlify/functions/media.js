@@ -81,7 +81,7 @@ exports.handler = async function (event) {
     if (!buf.length) return json(400, { error: "empty" });
     if (buf.length > 9 * 1024 * 1024) return json(413, { error: "too_large", message: "Image exceeds 9 MB after processing." });
 
-    const ext = ((contentType.split("/")[1] || "jpg").replace("+xml", "").replace("jpeg", "jpg")).slice(0, 5);
+    const ext = ((contentType.split("/")[1] || "jpg").replace("+xml", "").replace("jpeg", "jpg").replace("quicktime", "mov").replace("x-matroska", "mkv").replace("x-m4v", "mp4")).slice(0, 5);
     const id = crypto.createHash("sha1").update(buf).digest("hex").slice(0, 20) + "." + ext;
     try { await withStore(function (s) { return s.set(id, buf, { metadata: { contentType } }); }); }
     catch (e) { return json(500, { error: "store_failed", message: String(e && e.message || e) }); }
