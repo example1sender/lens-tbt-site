@@ -44,8 +44,9 @@
       { key: "home.cta",              label: "Closing CTA background",     type: "bg",  def: IMG.lake }
     ]},
     { page: "About", slots: [
-      { key: "about.feature", label: "Wide feature image", type: "img", def: IMG.weddinghall },
-      { key: "about.founder", label: "Founder portrait",   type: "img", def: IMG.bride }
+      { key: "about.feature",     label: "Wide feature image",            type: "img", def: IMG.weddinghall },
+      { key: "about.founder",     label: "Founder portrait — Rasha (Lens)", type: "img", def: IMG.bride },
+      { key: "about.founder_tbt", label: "Founder portrait — Abeer (TBT)",  type: "img", def: IMG.stylist }
     ]},
     { page: "Services", slots: [
       { key: "services.card_weddings",  label: "Card — Weddings",          type: "img", def: IMG.bride },
@@ -54,20 +55,6 @@
       { key: "services.card_portraits", label: "Card — Portraits",         type: "img", def: IMG.couple },
       { key: "services.card_corporate", label: "Card — Corporate & Galas", type: "img", def: IMG.forest },
       { key: "services.card_gifting",   label: "Card — Gifting Suites",    type: "img", def: IMG.hamper }
-    ]},
-    { page: "Portfolio", slots: [
-      { key: "portfolio.item_1",  label: "Gallery 1 (Portraits)", type: "img", def: IMG.paris },
-      { key: "portfolio.item_2",  label: "Gallery 2 (Weddings)",  type: "img", def: IMG.weddinghall },
-      { key: "portfolio.item_3",  label: "Gallery 3 (Products)",  type: "img", def: IMG.giftbox },
-      { key: "portfolio.item_4",  label: "Gallery 4 (Events)",    type: "img", def: IMG.eventtable },
-      { key: "portfolio.item_5",  label: "Gallery 5 (Portraits)", type: "img", def: IMG.couple },
-      { key: "portfolio.item_6",  label: "Gallery 6 (Products)",  type: "img", def: IMG.roses },
-      { key: "portfolio.item_7",  label: "Gallery 7 (Events)",    type: "img", def: IMG.gala },
-      { key: "portfolio.item_8",  label: "Gallery 8 (Weddings)",  type: "img", def: IMG.bride },
-      { key: "portfolio.item_9",  label: "Gallery 9 (Products)",  type: "img", def: IMG.driedbq },
-      { key: "portfolio.item_10", label: "Gallery 10 (Events)",   type: "img", def: IMG.stylist },
-      { key: "portfolio.item_11", label: "Gallery 11 (Portraits)",type: "img", def: IMG.architecture },
-      { key: "portfolio.item_12", label: "Gallery 12 (Events)",   type: "img", def: IMG.forest }
     ]},
     { page: "Weddings", slots: [
       { key: "weddings.hero",      label: "Hero background",  type: "bg",  def: IMG.couple },
@@ -129,6 +116,7 @@
       { key: "lense.founder",       label: "Founder name",      type: "text",     def: "Rasha Khan" },
       { key: "lense.tagline",       label: "Tagline",           type: "text",     def: "Mumbai wedding & commercial photographer · 10+ years" },
       { key: "lense.bio",           label: "Short bio",         type: "textarea", def: "A Mumbai wedding & commercial photographer with 10+ years behind the lens, Rasha founded The Lens Perspective Photography with a love for candid, traditional and intimate storytelling — capturing the feeling of a moment, not just the frame." },
+      { key: "lense.quote",         label: "Founder quote",     type: "textarea", def: "I don't photograph events. I photograph the way they made everyone feel." },
       { key: "lense.email",         label: "Email",             type: "text",     def: "designers03studio@gmail.com" },
       { key: "lense.phone",         label: "Phone",             type: "text",     def: "+91 75069 91054" },
       { key: "lense.instagram",     label: "Instagram handle",  type: "text",     def: "@the_lensperspective" },
@@ -138,11 +126,12 @@
     { page: "TBT Events — details", fields: [
       { key: "tbt.name",          label: "Brand name",        type: "text",     def: "TBT Events by Abeer K" },
       { key: "tbt.founder",       label: "Founder name",      type: "text",     def: "Abeer Khan" },
-      { key: "tbt.tagline",       label: "Tagline",           type: "text",     def: "Custom productions, floral, balloon & lighting installations" },
-      { key: "tbt.bio",           label: "Short bio",         type: "textarea", def: "We transform spaces into immersive worlds — sculptural florals, considered lighting and playful balloon artistry, all composed with a designer's eye." },
+      { key: "tbt.tagline",       label: "Tagline",           type: "text",     def: "Event décor in Mumbai — custom balloon, floral & lighting installations" },
+      { key: "tbt.bio",           label: "Short bio",         type: "textarea", def: "Abeer Khan is the founder of TBT Events, a boutique décor studio based in Mumbai. She and her team craft fresh floral arrangements, bespoke balloon installations, ambient lighting, and thoughtfully curated props — transforming birthdays, weddings, and private celebrations into refined, memorable experiences. Every setup is designed with intention: a considered palette, a curated mood, and the small details that make an occasion feel unmistakably yours." },
+      { key: "tbt.quote",         label: "Founder quote",     type: "textarea", def: "We don't simply style a space — we shape the feeling people carry home." },
       { key: "tbt.email",         label: "Email",             type: "text",     def: "designers03studio@gmail.com" },
-      { key: "tbt.phone",         label: "Phone",             type: "text",     def: "+91 75069 91054" },
-      { key: "tbt.whatsapp_url",  label: "WhatsApp URL",      type: "text",     def: "https://wa.me/message/R2FYRZQBUD6IK1" },
+      { key: "tbt.phone",         label: "Phone",             type: "text",     def: "+91 90047 04237" },
+      { key: "tbt.whatsapp_url",  label: "WhatsApp URL",      type: "text",     def: "https://wa.me/919004704237" },
       { key: "tbt.instagram",     label: "Instagram handle",  type: "text",     def: "@tbt.events" },
       { key: "tbt.instagram_url", label: "Instagram URL",     type: "text",     def: "https://instagram.com/tbt.events" },
       { key: "tbt.location",      label: "Location",          type: "text",     def: "Mumbai, India" }
@@ -166,6 +155,7 @@
       { key: "about.hero_title",   label: "Hero heading", type: "textarea", def: "We frame feeling, not just faces." },
       { key: "about.hero_note",    label: "Hero side note", type: "textarea", def: "The Lens Perspective Photography began with a simple conviction — that the most beautiful moments are the quiet ones, and they deserve to be remembered cinematically." },
       { key: "about.philosophy_title", label: "Philosophy heading", type: "text", def: "A cinematic philosophy." },
+      { key: "about.founders_title", label: "Founders heading", type: "text", def: "Meet the founders." },
       { key: "about.process_title", label: "Process heading", type: "text",  def: "How we work." },
       { key: "about.cta_title",    label: "CTA heading",  type: "text",     def: "Let's create something timeless." }
     ]},
@@ -245,12 +235,10 @@
      placeholders — each gallery starts empty until you add images.
      Stored as { <galleryId>: [ { url, alt }, ... ] } in localStorage
      ("tlp_galleries") for preview and published to the server to go live. */
+  // Only galleries that actually render on a page are listed here, so the
+  // admin never shows a gallery whose photos wouldn't appear anywhere.
   window.TLP_GALLERIES = [
-    { id: "portfolio", label: "Portfolio gallery",            page: "Portfolio" },
-    { id: "weddings",  label: "Weddings gallery",             page: "Weddings" },
-    { id: "product",   label: "Product photography gallery",  page: "Product Photography" },
-    { id: "events",    label: "Events & décor gallery",       page: "Event Decoration & Gifting" },
-    { id: "bt",        label: "TBT Events gallery",           page: "TBT Events by Abeer K" }
+    { id: "portfolio", label: "Portfolio gallery (photos & videos)", page: "Portfolio" }
   ];
   window.TLP_getGalleries = function () {
     try { return JSON.parse(localStorage.getItem("tlp_galleries") || "{}"); }

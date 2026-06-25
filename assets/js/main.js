@@ -120,23 +120,29 @@
   //   2. fresh from the serverless function (the live source of truth)
   //   3. fallback to the committed published.json (local preview / offline)
   function fetchPublished() {
+    // 1) Instant paint from the last-known published settings (durable — survives
+    //    a slow/cold server, so the site never flashes back to defaults).
     try { var c = JSON.parse(localStorage.getItem(PUBCACHE) || "null"); if (c) applyPub(c); } catch (e) {}
-    var ctrl = ("AbortController" in window) ? new AbortController() : null;
-    var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 7000) : null;
-    fetch("/.netlify/functions/settings", { cache: "no-store", signal: ctrl ? ctrl.signal : undefined })
-      .then(function (r) { if (timer) clearTimeout(timer); return r.ok ? r.json() : null; })
-      .then(function (p) {
-        if (!p || typeof p !== "object") throw new Error("no settings");
-        try { localStorage.setItem(PUBCACHE, JSON.stringify(p)); } catch (e) {}
-        applyPub(p);
-      })
-      .catch(function () {
-        if (timer) clearTimeout(timer);
-        fetch("assets/js/published.json", { cache: "no-store" })
-          .then(function (r) { return r.ok ? r.json() : null; })
-          .then(applyPub)
-          .catch(function () {});
-      });
+    // 2) Refresh from the server, with a generous timeout and one retry.
+    //    CRITICAL: if the fetch fails, we keep whatever is already shown and
+    //    NEVER fall back to built-in defaults. Only a real response updates things.
+    function tryLoad(attempt) {
+      var ctrl = ("AbortController" in window) ? new AbortController() : null;
+      var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 12000) : null;
+      fetch("/.netlify/functions/settings", { cache: "no-store", signal: ctrl ? ctrl.signal : undefined })
+        .then(function (r) { if (timer) clearTimeout(timer); if (!r.ok) throw new Error("bad status"); return r.json(); })
+        .then(function (p) {
+          if (!p || typeof p !== "object") throw new Error("no settings");
+          try { localStorage.setItem(PUBCACHE, JSON.stringify(p)); } catch (e) {}
+          applyPub(p);
+        })
+        .catch(function () {
+          if (timer) clearTimeout(timer);
+          if (attempt < 2) { setTimeout(function () { tryLoad(attempt + 1); }, 2500); }
+          // else: give up quietly — cached/published content stays; defaults are never restored.
+        });
+    }
+    tryLoad(1);
   }
 
   /* ------------------------------------------------ custom lens cursor */
