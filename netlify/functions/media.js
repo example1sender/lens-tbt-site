@@ -27,10 +27,9 @@ exports.handler = async function (event) {
   try { ({ getStore } = await import("@netlify/blobs")); }
   catch (e) { return json(500, { error: "blobs_unavailable", message: "Netlify Blobs not available in this context." }); }
 
-  // Use Netlify auto-config (works on Git/CLI builds); fall back to explicit creds.
+  // Persistent, site-wide media store with explicit credentials (works on every deploy).
   async function withStore(fn) {
-    try { return await fn(getStore("tlp-media")); }
-    catch (e1) { return await fn(getStore({ name: "tlp-media", siteID: process.env.SITE_ID, token: process.env.NETLIFY_API_TOKEN })); }
+    return await fn(getStore({ name: "tlp-media", siteID: process.env.SITE_ID, token: process.env.NETLIFY_API_TOKEN }));
   }
 
   /* ---- list all uploaded images (for the admin Media Library) ---- */

@@ -39,20 +39,14 @@ exports.handler = async function (event) {
     updated: new Date().toISOString()
   };
 
-  var SITE_ID = process.env.SITE_ID, BLOB_TOKEN = process.env.NETLIFY_API_TOKEN, mode = "auto";
-  async function save() {
-    try { await getStore("tlp-settings").setJSON("current", payload); }
-    catch (e1) {
-      mode = "manual";
-      await getStore({ name: "tlp-settings", siteID: SITE_ID, token: BLOB_TOKEN }).setJSON("current", payload);
-    }
-  }
+  var SITE_ID = process.env.SITE_ID, BLOB_TOKEN = process.env.NETLIFY_API_TOKEN;
   try {
-    await save();
+    const store = getStore({ name: "tlp-settings", siteID: SITE_ID, token: BLOB_TOKEN });
+    await store.setJSON("current", payload);
   } catch (e) {
-    return json(500, { error: "store_failed", v: "creds3", hasSite: !!SITE_ID, hasToken: !!BLOB_TOKEN, message: String(e && e.message || e) });
+    return json(500, { error: "store_failed", v: "creds4", hasSite: !!SITE_ID, hasToken: !!BLOB_TOKEN, message: String(e && e.message || e) });
   }
-  return json(200, { ok: true, v: "creds3", mode: mode, updated: payload.updated });
+  return json(200, { ok: true, v: "creds4", updated: payload.updated });
 };
 
 function json(statusCode, obj) {

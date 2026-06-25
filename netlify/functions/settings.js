@@ -27,8 +27,7 @@ exports.handler = async function (event) {
   catch (e) { return { statusCode: 200, headers: CORS, body: empty }; }
 
   async function load() {
-    try { return await getStore("tlp-settings").get("current", { type: "json" }); }
-    catch (e1) { return await getStore({ name: "tlp-settings", siteID: process.env.SITE_ID, token: process.env.NETLIFY_API_TOKEN }).get("current", { type: "json" }); }
+    return await getStore({ name: "tlp-settings", siteID: process.env.SITE_ID, token: process.env.NETLIFY_API_TOKEN }).get("current", { type: "json" });
   }
   try {
     const data = await load();
