@@ -27,14 +27,16 @@ exports.handler = async function (event) {
   try { ({ getStore } = await import("@netlify/blobs")); }
   catch (e) { return json(500, { error: "blobs_unavailable", message: "Netlify Blobs not available in this context." }); }
 
-  let store;
-  try { store = getStore("tlp-media", { siteID: process.env.SITE_ID, token: process.env.NETLIFY_API_TOKEN }); }
-  catch (e) { return json(500, { error: "blobs_init", message: String(e && e.message || e) }); }
+  // Use Netlify auto-config (works on Git/CLI builds); fall back to explicit creds.
+  async function withStore(fn) {
+    try { return await fn(getStore("tlp-media")); }
+    catch (e1) { return await fn(getStore({ name: "tlp-media", siteID: process.env.SITE_ID, token: process.env.NETLIFY_API_TOKEN })); }
+  }
 
   /* ---- list all uploaded images (for the admin Media Library) ---- */
   if (event.httpMethod === "GET" && (event.queryStringParameters || {}).list) {
     try {
-      const res = await store.list();
+      const res = await withStore(function (s) { return s.list(); });
       const items = (res && res.blobs ? res.blobs : []).map(function (b) {
         return { id: b.key, url: "/.netlify/functions/media?id=" + encodeURIComponent(b.key) };
       });
@@ -47,7 +49,7 @@ exports.handler = async function (event) {
     const id = (event.queryStringParameters || {}).id;
     if (!id) return json(400, { error: "missing_id" });
     try {
-      const res = await store.getWithMetadata(id, { type: "arrayBuffer" });
+      const res = await withStore(function (s) { return s.getWithMetadata(id, { type: "arrayBuffer" }); });
       if (!res || !res.data) return { statusCode: 404, headers: CORS, body: "Not found" };
       const ct = (res.metadata && res.metadata.contentType) || "image/jpeg";
       return {
@@ -81,7 +83,7 @@ exports.handler = async function (event) {
 
     const ext = ((contentType.split("/")[1] || "jpg").replace("+xml", "").replace("jpeg", "jpg")).slice(0, 5);
     const id = crypto.createHash("sha1").update(buf).digest("hex").slice(0, 20) + "." + ext;
-    try { await store.set(id, buf, { metadata: { contentType } }); }
+    try { await withStore(function (s) { return s.set(id, buf, { metadata: { contentType } }); }); }
     catch (e) { return json(500, { error: "store_failed", message: String(e && e.message || e) }); }
     return json(200, { url: "/.netlify/functions/media?id=" + encodeURIComponent(id), id });
   }

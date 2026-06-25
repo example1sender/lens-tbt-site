@@ -26,9 +26,12 @@ exports.handler = async function (event) {
   try { ({ getStore } = await import("@netlify/blobs")); }
   catch (e) { return { statusCode: 200, headers: CORS, body: empty }; }
 
+  async function load() {
+    try { return await getStore("tlp-settings").get("current", { type: "json" }); }
+    catch (e1) { return await getStore({ name: "tlp-settings", siteID: process.env.SITE_ID, token: process.env.NETLIFY_API_TOKEN }).get("current", { type: "json" }); }
+  }
   try {
-    const store = getStore("tlp-settings", { siteID: process.env.SITE_ID, token: process.env.NETLIFY_API_TOKEN });
-    const data = await store.get("current", { type: "json" });
+    const data = await load();
     if (!data || typeof data !== "object") return { statusCode: 200, headers: CORS, body: empty };
     return { statusCode: 200, headers: CORS, body: JSON.stringify({ images: data.images || {}, text: data.text || {}, galleries: data.galleries || {} }) };
   } catch (e) {
