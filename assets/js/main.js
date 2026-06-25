@@ -41,6 +41,19 @@
   }
   function gEsc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
 
+  /* ---- video support (YouTube/Vimeo links, .mp4 links, uploaded clips) ---- */
+  function ytId(u) { var m = String(u).match(/(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/)|youtu\.be\/)([\w-]{6,})/); return m ? m[1] : null; }
+  function vimeoId(u) { var m = String(u).match(/vimeo\.com\/(?:video\/)?(\d+)/); return m ? m[1] : null; }
+  function isFileVideo(u) { return /\.(mp4|webm|ogg|mov)(\?|#|$)/i.test(u) || /[?&]id=[^&]*\.(mp4|webm|ogg|mov)/i.test(u); }
+  function isVideo(u) { return !!(ytId(u) || vimeoId(u) || isFileVideo(u)); }
+  function videoEmbed(u, aspect) {
+    var ratio = aspect || "16/9";
+    var yt = ytId(u), vm = vimeoId(u);
+    if (yt) return '<div class="w-full" style="aspect-ratio:' + ratio + '"><iframe class="w-full h-full" src="https://www.youtube.com/embed/' + yt + '" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
+    if (vm) return '<div class="w-full" style="aspect-ratio:' + ratio + '"><iframe class="w-full h-full" src="https://player.vimeo.com/video/' + vm + '" loading="lazy" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>';
+    return '<video class="w-full block" style="' + (aspect ? "aspect-ratio:" + aspect + ";object-fit:cover;height:100%" : "") + '" controls preload="metadata" playsinline src="' + gEsc(u) + '"></video>';
+  }
+
   // Renders every [data-gallery="id"] container from its (dynamic) image list.
   //   data-gallery-aspect="4/5"  -> fixed-ratio grid tiles (default: natural / masonry)
   //   data-gallery-item="<classes>" -> extra classes per tile (e.g. masonry break-inside)
@@ -60,6 +73,9 @@
       c.innerHTML = list.map(function (it) {
         if (!it || !it.url) return "";
         var alt = gEsc(it.alt || "");
+        if (isVideo(it.url)) {
+          return '<figure class="' + itemCls + ' relative overflow-hidden rounded-xl m-0 bg-black">' + videoEmbed(it.url, aspect) + '</figure>';
+        }
         var inner;
         if (aspect) {
           inner = '<div class="w-full overflow-hidden" style="aspect-ratio:' + gEsc(aspect) + '"><img src="' + gEsc(it.url) + '" alt="' + alt + '" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"></div>';
