@@ -16,6 +16,13 @@
     X-Frame-Options = "SAMEORIGIN"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
+# Always revalidate the site scripts so a new build takes effect immediately
+# (prevents the browser from running a stale main.js / content.js after a deploy).
+[[headers]]
+  for = "/assets/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
 # Keep the admin/login pages out of search engines.
 [[headers]]
   for = "/admin.html"

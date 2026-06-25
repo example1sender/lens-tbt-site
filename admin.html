@@ -756,39 +756,50 @@
     }
   });
 
-  document.getElementById("publishBtn").addEventListener("click", function () {
+  document.getElementById("publishBtn").addEventListener("click", async function () {
     try { localStorage.setItem(IMG_KEY, JSON.stringify(overrides)); localStorage.setItem(TXT_KEY, JSON.stringify(textOverrides)); localStorage.setItem(GAL_KEY, JSON.stringify(galleries)); } catch (e) {}
-    // Warn if any raw image data slipped into the payload (would bloat publish).
-    var dataStr = JSON.stringify({ images: overrides, text: textOverrides, galleries: galleries });
     var hasRaw = Object.keys(overrides).some(function (k) { return String(overrides[k]).indexOf("data:") === 0; });
     if (hasRaw) {
       toast("Some photos are still local previews. On your live site, re-upload them so they're hosted, then Publish.", "error");
     }
     var btn = document.getElementById("publishBtn"), label = btn.innerHTML;
     btn.disabled = true; btn.innerHTML = '<span class="material-symbols-outlined text-[18px] spin">progress_activity</span>Publishing…';
-    fetch("/.netlify/functions/publish", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ key: adminKey(), images: overrides, text: textOverrides, galleries: galleries })
-    }).then(function (r) {
+
+    // ANTI-WIPE: merge with whatever is currently LIVE before publishing, so this
+    // publish can never erase content set from another browser/device. Your edits
+    // (including removals/deletions) win; everything you didn't touch is preserved.
+    var live = { images: {}, text: {}, galleries: {} };
+    try {
+      var lr = await fetch("/.netlify/functions/settings?t=" + Date.now(), { cache: "no-store" });
+      if (lr.ok) { var lj = await lr.json(); if (lj && typeof lj === "object") live = lj; }
+    } catch (e) {}
+    var mImages = Object.assign({}, live.images || {}, overrides);
+    var mText = Object.assign({}, live.text || {}, textOverrides);
+    var mGalleries = Object.assign({}, live.galleries || {}, galleries);
+    var dataStr = JSON.stringify({ images: mImages, text: mText, galleries: mGalleries });
+
+    try {
+      var r = await fetch("/.netlify/functions/publish", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: adminKey(), images: mImages, text: mText, galleries: mGalleries })
+      });
       btn.disabled = false; btn.innerHTML = label;
-      if (!r.ok) return r.json().then(function (j) { throw new Error((j && j.message) || "publish failed"); });
-      try { localStorage.setItem(PUBCACHE, dataStr); } catch (e) {}
+      if (!r.ok) { var j = await r.json().catch(function () { return {}; }); throw new Error((j && j.message) || "publish failed"); }
+      // Adopt the merged state locally so the admin stays in sync with what's live.
+      overrides = mImages; textOverrides = mText; galleries = mGalleries;
+      try { localStorage.setItem(PUBCACHE, dataStr); localStorage.setItem(IMG_KEY, JSON.stringify(mImages)); localStorage.setItem(TXT_KEY, JSON.stringify(mText)); localStorage.setItem(GAL_KEY, JSON.stringify(mGalleries)); } catch (e) {}
       dirty = false; unpublished = false; setStatus();
       toast("Published live — now visible on every device.");
-    }).catch(function (err) {
+    } catch (err) {
       btn.disabled = false; btn.innerHTML = label;
-      // Keep the work safe locally either way.
-      try { localStorage.setItem(IMG_KEY, JSON.stringify(overrides)); localStorage.setItem(TXT_KEY, JSON.stringify(textOverrides)); localStorage.setItem(GAL_KEY, JSON.stringify(galleries)); } catch (e) {}
-      dirty = false; unpublished = true; setStatus();
       var host = location.hostname;
       var local = !host || host === "localhost" || host === "127.0.0.1" || location.protocol === "file:";
       if (local) {
-        // Not a real error — there's just no server when previewing locally.
         toast("Saved as preview. To publish to every device, open this admin at your live site address (…netlify.app/admin.html).");
       } else {
         toast("Couldn't publish just now — your changes are saved. Please try Publish again in a moment.", "error");
       }
-    });
+    }
   });
 
   document.getElementById("exportBtn").addEventListener("click", function () {
@@ -970,7 +981,30 @@
   }
 
   /* ================= INIT ================= */
-  renderImages(); renderText(); renderGalleries(); updateStats(); setStatus();
+  function renderAll() { renderImages(); renderText(); renderGalleries(); updateStats(); setStatus(); }
+  renderAll(); // instant paint from local
+
+  // Load what's currently LIVE and use it as the editing baseline, so the admin
+  // always reflects the published site and a Publish never drops existing content.
+  (function bootstrap() {
+    var ctrl = ("AbortController" in window) ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 12000) : null;
+    fetch("/.netlify/functions/settings?t=" + Date.now(), { cache: "no-store", signal: ctrl ? ctrl.signal : undefined })
+      .then(function (r) { if (timer) clearTimeout(timer); if (!r.ok) throw 0; return r.json(); })
+      .then(function (live) {
+        if (!live || typeof live !== "object") return;
+        overrides = Object.assign({}, live.images || {}, overrides);
+        textOverrides = Object.assign({}, live.text || {}, textOverrides);
+        galleries = Object.assign({}, live.galleries || {}, galleries);
+        try {
+          localStorage.setItem(IMG_KEY, JSON.stringify(overrides));
+          localStorage.setItem(TXT_KEY, JSON.stringify(textOverrides));
+          localStorage.setItem(GAL_KEY, JSON.stringify(galleries));
+        } catch (e) {}
+        renderAll();
+      })
+      .catch(function () { /* offline / cold: keep local view; Publish still merges with live */ });
+  })();
 })();
 </script>
 </body>
